@@ -251,54 +251,23 @@
         </div>
     </footer>
 
-    <script>
-        // --- 1. LOGIKA SAKLAR RUTE (URL CONFIG) ---
-        const GITHUB_USER = 'mbs163'; 
-        
-        const CONFIG = {
-            // Mode Aktif: GitHub Pages
-            portalAppBase: `https://${GITHUB_USER}.github.io/portal-app/`
-            // Nanti jika pakai custom domain: "https://app.masmanbaussalam.sch.id/"
-        };
+   <!-- Bagian SCRIPT di bawah </body> -->
+<script>
+    const GITHUB_USER = 'mbs163'; 
+    const CONFIG = {
+        webPortalBase: `https://${GITHUB_USER}.github.io/web-portal/`,
+        portalAppBase: `https://${GITHUB_USER}.github.io/portal-app/`
+    };
 
-        // Pasang link dinamis ke tombol (Desktop & Mobile)
-        document.getElementById('btn-nav-portal').href = CONFIG.portalAppBase;
-        document.getElementById('btn-hero-portal').href = CONFIG.portalAppBase;
-        document.getElementById('btn-hero-pmb').href = CONFIG.portalAppBase + "pmb/index.html";
-        document.getElementById('btn-mobile-portal').href = CONFIG.portalAppBase; // Tombol di menu mobile
-        
-        // Pasang link dinamis ke footer
-        document.getElementById('foot-link-portal').href = CONFIG.portalAppBase;
-        document.getElementById('foot-link-pmb').href = CONFIG.portalAppBase + "pmb/index.html";
-        document.getElementById('foot-link-verifikasi').href = CONFIG.portalAppBase + "verifikasi/index.html";
-
-
-        // --- 2. LOGIKA MENU MOBILE (HAMBURGER) ---
-        const mobileBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const icon = mobileBtn.querySelector('i');
-
-        // Buka/Tutup menu saat tombol ditekan
-        mobileBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-            
-            if (mobileMenu.classList.contains('hidden')) {
-                icon.classList.remove('fa-xmark');
-                icon.classList.add('fa-bars');
-            } else {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-xmark');
-            }
-        });
-
-        // Tutup otomatis saat link di dalam menu mobile diklik
-        document.querySelectorAll('#mobile-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
-                icon.classList.remove('fa-xmark');
-                icon.classList.add('fa-bars');
-            });
-        });
-    </script>
+    // Link Navigasi
+    document.getElementById('btn-nav-portal').href = CONFIG.portalAppBase;
+    document.getElementById('btn-hero-portal').href = CONFIG.portalAppBase;
+    document.getElementById('btn-hero-pmb').href = CONFIG.portalAppBase + "pmb/index.html";
+    
+    // Link Footer
+    document.getElementById('foot-link-portal').href = CONFIG.portalAppBase;
+    document.getElementById('foot-link-pmb').href = CONFIG.portalAppBase + "pmb/index.html";
+    document.getElementById('foot-link-verifikasi').href = CONFIG.portalAppBase + "verifikasi/index.html";
+</script>
 </body>
 </html>
