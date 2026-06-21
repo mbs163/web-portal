@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAS MANBA'USSALAM | Modern & Berprestasi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#0F766E', accent: '#D4AF37', bgLight: '#F9FAFB', textDark: '#111827' },
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-bgLight text-textDark font-sans antialiased scroll-smooth">
+
+    <nav class="bg-white/95 backdrop-blur shadow-sm sticky top-0 z-50 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center text-white text-2xl shadow-md shadow-primary/20">
+                        <i class="fa-solid fa-book-quran"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-xl leading-tight text-primary">MAS MANBA'USSALAM</h1>
+                        <p class="text-[10px] text-accent font-bold tracking-widest uppercase">Islamic Senior High School</p>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center gap-8 font-semibold text-sm">
+                    <a href="#profil" class="text-gray-600 hover:text-primary transition-colors">Profil</a>
+                    <a href="#berita" class="text-gray-600 hover:text-primary transition-colors">Berita</a>
+                    <a href="#galeri" class="text-gray-600 hover:text-primary transition-colors">Galeri</a>
+                    <a href="admin/index.html" class="text-gray-400 hover:text-primary transition-colors"><i class="fa-solid fa-lock text-[10px]"></i> Login Humas</a>
+                    
+                    <a href="#" id="btn-nav-portal" class="bg-primary text-white px-5 py-2.5 rounded-xl hover:bg-emerald-800 transition-all shadow-md shadow-primary/10 flex items-center gap-2">
+                        <i class="fa-solid fa-right-to-bracket text-accent"></i> Masuk Aplikasi
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative bg-gradient-to-br from-primary to-emerald-900 overflow-hidden py-20 lg:py-32">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#D4AF37_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col lg:flex-row items-center gap-12">
+            <div class="lg:w-1/2 text-center lg:text-left text-white">
+                <span class="inline-flex items-center gap-2 py-1.5 px-3.5 rounded-full bg-emerald-800/60 text-accent font-semibold text-xs mb-6 border border-accent/20">
+                    <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> PMB Tahun Ajaran Baru Telah Dibuka
+                </span>
+                <h1 class="text-4xl lg:text-6xl font-black leading-tight mb-6">Membentuk Generasi <span class="text-accent">Rabbani</span> Unggul & Berprestasi</h1>
+                <p class="text-base text-emerald-100/90 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">Selamat datang di MAS Manba'ussalam. Madrasah modern yang memadukan kedalaman ilmu syari'at dengan penguasaan teknologi sains masa kini.</p>
+                <div class="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
+                    <a href="#" id="btn-hero-pmb" class="w-full sm:w-auto px-8 py-4 bg-accent text-primary font-bold rounded-xl hover:bg-yellow-400 transition-all shadow-lg text-center">Daftar PMB Sekarang</a>
+                    <a href="#" id="btn-hero-portal" class="w-full sm:w-auto px-8 py-4 bg-transparent border-2 border-white/30 text-white font-bold rounded-xl hover:bg-white hover:text-primary transition-all text-center">Portal Sistem</a>
+                </div>
+            </div>
+            <div class="lg:w-1/2 w-full">
+                <div class="aspect-[4/3] rounded-2xl bg-emerald-800 overflow-hidden shadow-2xl border-4 border-white/10 relative">
+                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80" alt="Gedung Madrasah" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="profil" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold text-primary mb-3">Profil Madrasah</h2>
+            <div class="w-12 h-1 bg-accent mx-auto rounded-full mb-12"></div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-bgLight p-8 rounded-2xl border border-gray-100"><h3 class="font-bold text-lg mb-3">Sejarah Singkat</h3><p class="text-gray-600 text-sm">Didirikan atas dasar cita-cita luhur mencetak ulama ulul albab.</p></div>
+                <div class="bg-bgLight p-8 rounded-2xl border border-gray-100"><h3 class="font-bold text-lg mb-3">Visi Utama</h3><p class="text-gray-600 text-sm">Pusat keunggulan pendidikan Islam integratif & berwawasan global.</p></div>
+                <div class="bg-bgLight p-8 rounded-2xl border border-gray-100"><h3 class="font-bold text-lg mb-3">Misi Strategis</h3><p class="text-gray-600 text-sm">Menyelenggarakan tahfidz intensif dan literasi digital.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-textDark text-white py-8 border-t border-gray-800 text-center text-sm">
+        &copy; 2026 MAS MANBA'USSALAM.
+    </footer>
+
+    <script>
+        // 1. Definisikan Username GitHub Anda
+        const GITHUB_USER = 'mbs163'; 
+        
+        // 2. Setting Jalur (Akan diganti ke custom domain di masa depan)
+        const CONFIG = {
+            // Mode Aktif: GitHub Pages Standard Route
+            portalAppBase: `https://${GITHUB_USER}.github.io/portal-app/`
+            
+            // Mode Custom Domain Nanti:
+            // portalAppBase: "https://app.masmanbaussalam.sch.id/"
+        };
+
+        // 3. Pasang link ke tombol-tombol yang mengarah ke Repo Portal
+        document.getElementById('btn-nav-portal').href = CONFIG.portalAppBase;
+        document.getElementById('btn-hero-portal').href = CONFIG.portalAppBase;
+        document.getElementById('btn-hero-pmb').href = CONFIG.portalAppBase + "pmb/index.html"; // Mengarah ke folder PMB di repo portal
+    </script>
+</body>
+</html>
