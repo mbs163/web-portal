@@ -18,7 +18,7 @@
         }
     </script>
 </head>
-<body class="bg-bgLight text-textDark font-sans antialiased scroll-smooth">
+<body class="bg-bgLight text-textDark font-sans antialiased scroll-smooth relative">
 
     <nav class="bg-white/95 backdrop-blur shadow-sm sticky top-0 z-50 transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -32,14 +32,37 @@
                         <p class="text-[10px] text-accent font-bold tracking-widest uppercase">Islamic Senior High School</p>
                     </div>
                 </div>
+                
                 <div class="hidden md:flex items-center gap-8 font-semibold text-sm">
                     <a href="#profil" class="text-gray-600 hover:text-primary transition-colors">Profil</a>
                     <a href="#berita" class="text-gray-600 hover:text-primary transition-colors">Berita</a>
                     <a href="#galeri" class="text-gray-600 hover:text-primary transition-colors">Galeri</a>
-                    <a href="admin/index.html" class="text-gray-400 hover:text-primary transition-colors"><i class="fa-solid fa-lock text-[10px]"></i> Login Humas</a>
-                    
+                    <a href="#kontak" class="text-gray-600 hover:text-primary transition-colors">Kontak</a>
+                    <a href="admin/index.html" class="text-gray-400 hover:text-primary transition-colors" title="Login Humas"><i class="fa-solid fa-lock text-[10px]"></i></a>
                     <a href="#" id="btn-nav-portal" class="bg-primary text-white px-5 py-2.5 rounded-xl hover:bg-emerald-800 transition-all shadow-md shadow-primary/10 flex items-center gap-2">
                         <i class="fa-solid fa-right-to-bracket text-accent"></i> Masuk Aplikasi
+                    </a>
+                </div>
+
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-primary text-2xl focus:outline-none transition-colors">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 shadow-xl absolute w-full left-0 top-20 z-40">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#profil" class="block px-3 py-2.5 rounded-lg text-base font-semibold text-gray-700 hover:text-primary hover:bg-emerald-50 transition-colors">Profil Madrasah</a>
+                <a href="#berita" class="block px-3 py-2.5 rounded-lg text-base font-semibold text-gray-700 hover:text-primary hover:bg-emerald-50 transition-colors">Berita & Informasi</a>
+                <a href="#galeri" class="block px-3 py-2.5 rounded-lg text-base font-semibold text-gray-700 hover:text-primary hover:bg-emerald-50 transition-colors">Galeri Kegiatan</a>
+                <a href="#kontak" class="block px-3 py-2.5 rounded-lg text-base font-semibold text-gray-700 hover:text-primary hover:bg-emerald-50 transition-colors">Kontak Kami</a>
+                <a href="admin/index.html" class="block px-3 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:text-primary hover:bg-emerald-50 transition-colors"><i class="fa-solid fa-lock mr-2 text-gray-400"></i> Login CMS Humas</a>
+                
+                <div class="pt-4 mt-2 border-t border-gray-100">
+                    <a href="#" id="btn-mobile-portal" class="flex justify-center items-center w-full px-5 py-3.5 bg-primary text-white font-bold rounded-xl hover:bg-emerald-800 transition-all shadow-md shadow-primary/10 gap-2">
+                        <i class="fa-solid fa-right-to-bracket text-accent"></i> Masuk Portal Sistem
                     </a>
                 </div>
             </div>
@@ -56,12 +79,12 @@
                 <h1 class="text-4xl lg:text-6xl font-black leading-tight mb-6">Membentuk Generasi <span class="text-accent">Rabbani</span> Unggul & Berprestasi</h1>
                 <p class="text-base text-emerald-100/90 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">Selamat datang di MAS Manba'ussalam. Madrasah modern yang memadukan kedalaman ilmu syari'at dengan penguasaan teknologi sains masa kini.</p>
                 <div class="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
-                    <a href="#" id="btn-hero-pmb" class="w-full sm:w-auto px-8 py-4 bg-accent text-primary font-bold rounded-xl hover:bg-yellow-400 transition-all shadow-lg text-center">Daftar PMB Sekarang</a>
-                    <a href="#" id="btn-hero-portal" class="w-full sm:w-auto px-8 py-4 bg-transparent border-2 border-white/30 text-white font-bold rounded-xl hover:bg-white hover:text-primary transition-all text-center">Portal Sistem</a>
+                    <a href="#" id="btn-hero-pmb" class="w-full sm:w-auto px-8 py-4 bg-accent text-primary font-bold rounded-xl hover:bg-yellow-400 hover:-translate-y-1 transition-all duration-300 shadow-lg text-center">Daftar PMB Sekarang</a>
+                    <a href="#" id="btn-hero-portal" class="w-full sm:w-auto px-8 py-4 bg-transparent border-2 border-white/30 text-white font-bold rounded-xl hover:bg-white hover:text-primary transition-all duration-300 text-center">Portal Sistem</a>
                 </div>
             </div>
             <div class="lg:w-1/2 w-full">
-                <div class="aspect-[4/3] rounded-2xl bg-emerald-800 overflow-hidden shadow-2xl border-4 border-white/10 relative">
+                <div class="aspect-[4/3] rounded-2xl bg-emerald-800 overflow-hidden shadow-2xl border-4 border-white/10 relative hover:scale-[1.02] transition-transform duration-500">
                     <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80" alt="Gedung Madrasah" class="w-full h-full object-cover">
                 </div>
             </div>
@@ -73,34 +96,209 @@
             <h2 class="text-3xl font-bold text-primary mb-3">Profil Madrasah</h2>
             <div class="w-12 h-1 bg-accent mx-auto rounded-full mb-12"></div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-bgLight p-8 rounded-2xl border border-gray-100"><h3 class="font-bold text-lg mb-3">Sejarah Singkat</h3><p class="text-gray-600 text-sm">Didirikan atas dasar cita-cita luhur mencetak ulama ulul albab.</p></div>
-                <div class="bg-bgLight p-8 rounded-2xl border border-gray-100"><h3 class="font-bold text-lg mb-3">Visi Utama</h3><p class="text-gray-600 text-sm">Pusat keunggulan pendidikan Islam integratif & berwawasan global.</p></div>
-                <div class="bg-bgLight p-8 rounded-2xl border border-gray-100"><h3 class="font-bold text-lg mb-3">Misi Strategis</h3><p class="text-gray-600 text-sm">Menyelenggarakan tahfidz intensif dan literasi digital.</p></div>
+                <div class="bg-bgLight p-8 rounded-2xl border border-gray-100 hover:border-primary/20 transition-colors">
+                    <div class="w-14 h-14 bg-primary/10 text-primary mx-auto rounded-xl flex items-center justify-center text-2xl mb-6"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                    <h3 class="font-bold text-lg mb-3">Sejarah Singkat</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Berdiri dengan dedikasi tinggi untuk mencerdaskan bangsa melalui pendidikan berlandaskan nilai-nilai Ahlussunnah wal Jama'ah.</p>
+                </div>
+                <div class="bg-bgLight p-8 rounded-2xl border border-gray-100 hover:border-primary/20 transition-colors">
+                    <div class="w-14 h-14 bg-primary/10 text-primary mx-auto rounded-xl flex items-center justify-center text-2xl mb-6"><i class="fa-solid fa-eye"></i></div>
+                    <h3 class="font-bold text-lg mb-3">Visi Utama</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">"Menjadi lembaga pendidikan Islam terdepan dalam mencetak generasi Qur'ani yang unggul dalam IPTEK dan IMTAQ."</p>
+                </div>
+                <div class="bg-bgLight p-8 rounded-2xl border border-gray-100 hover:border-primary/20 transition-colors">
+                    <div class="w-14 h-14 bg-primary/10 text-primary mx-auto rounded-xl flex items-center justify-center text-2xl mb-6"><i class="fa-solid fa-bullseye"></i></div>
+                    <h3 class="font-bold text-lg mb-3">Misi Strategis</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Menyelenggarakan tahfidz intensif, mengembangkan riset sains, dan membina kemandirian santri secara menyeluruh.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <footer class="bg-textDark text-white py-8 border-t border-gray-800 text-center text-sm">
-        &copy; 2026 MAS MANBA'USSALAM.
+    <section id="berita" class="py-24 bg-bgLight">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-end mb-12">
+                <div>
+                    <h2 class="text-3xl font-bold text-primary mb-3">Berita & Pengumuman</h2>
+                    <div class="w-12 h-1 bg-accent rounded-full"></div>
+                </div>
+                <a href="#" class="text-primary font-semibold hover:text-accent transition-colors hidden sm:block text-sm">Lihat Semua Berita <i class="fa-solid fa-arrow-right ml-1"></i></a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <article class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all group">
+                    <div class="h-48 bg-gray-200 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=600&q=80" alt="News 1" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500">
+                    </div>
+                    <div class="p-6">
+                        <time class="text-xs text-gray-400 block mb-2 font-medium"><i class="fa-regular fa-calendar mr-1"></i> 24 Okt 2026</time>
+                        <h3 class="font-bold text-lg mb-2 text-textDark group-hover:text-primary transition-colors leading-tight">Santri MAS Manba'ussalam Raih Medali Emas Olimpiade Sains Nasional</h3>
+                        <p class="text-gray-500 text-sm mb-4 line-clamp-2">Pencapaian luar biasa ditunjukkan oleh tim riset madrasah dalam ajang bergengsi tingkat nasional tahun ini.</p>
+                        <a href="#" class="text-accent font-bold text-xs hover:text-primary transition-colors">BACA SELENGKAPNYA</a>
+                    </div>
+                </article>
+                <article class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all group">
+                    <div class="h-48 bg-gray-200 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1510519138101-570d1dca3d66?auto=format&fit=crop&w=600&q=80" alt="News 2" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500">
+                    </div>
+                    <div class="p-6">
+                        <time class="text-xs text-gray-400 block mb-2 font-medium"><i class="fa-regular fa-calendar mr-1"></i> 12 Okt 2026</time>
+                        <h3 class="font-bold text-lg mb-2 text-textDark group-hover:text-primary transition-colors leading-tight">Peringatan Maulid Nabi Muhammad SAW Berlangsung Khidmat</h3>
+                        <p class="text-gray-500 text-sm mb-4 line-clamp-2">Acara diisi dengan tabligh akbar dan penampilan hadroh dari ekstrakurikuler seni Islami madrasah.</p>
+                        <a href="#" class="text-accent font-bold text-xs hover:text-primary transition-colors">BACA SELENGKAPNYA</a>
+                    </div>
+                </article>
+                <article class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all group hidden md:block">
+                    <div class="h-48 bg-gray-200 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1546410531-ea4cea477149?auto=format&fit=crop&w=600&q=80" alt="News 3" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500">
+                    </div>
+                    <div class="p-6">
+                        <time class="text-xs text-gray-400 block mb-2 font-medium"><i class="fa-regular fa-calendar mr-1"></i> 05 Okt 2026</time>
+                        <h3 class="font-bold text-lg mb-2 text-textDark group-hover:text-primary transition-colors leading-tight">Ujian Tengah Semester Menggunakan CBT (Computer Based Test)</h3>
+                        <p class="text-gray-500 text-sm mb-4 line-clamp-2">Pelaksanaan evaluasi pembelajaran menggunakan server internal berjalan dengan lancar dan transparan.</p>
+                        <a href="#" class="text-accent font-bold text-xs hover:text-primary transition-colors">BACA SELENGKAPNYA</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section id="galeri" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <h2 class="text-3xl font-bold text-primary mb-3">Galeri Kegiatan</h2>
+                <div class="w-12 h-1 bg-accent mx-auto rounded-full mb-4"></div>
+                <p class="text-gray-500 text-sm">Dokumentasi momen berharga dan aktivitas santri di lingkungan madrasah.</p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="aspect-square bg-gray-100 rounded-2xl overflow-hidden shadow-sm relative group cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1510519138101-570d1dca3d66?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/40 transition-colors flex items-center justify-center"><i class="fa-solid fa-expand text-white opacity-0 group-hover:opacity-100 transition-opacity text-2xl"></i></div>
+                </div>
+                <div class="aspect-square bg-gray-100 rounded-2xl overflow-hidden shadow-sm relative group cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1546410531-ea4cea477149?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/40 transition-colors flex items-center justify-center"><i class="fa-solid fa-expand text-white opacity-0 group-hover:opacity-100 transition-opacity text-2xl"></i></div>
+                </div>
+                <div class="aspect-square bg-gray-100 rounded-2xl overflow-hidden shadow-sm relative group cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/40 transition-colors flex items-center justify-center"><i class="fa-solid fa-expand text-white opacity-0 group-hover:opacity-100 transition-opacity text-2xl"></i></div>
+                </div>
+                <div class="aspect-square bg-gray-100 rounded-2xl overflow-hidden shadow-sm relative group cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/40 transition-colors flex items-center justify-center"><i class="fa-solid fa-expand text-white opacity-0 group-hover:opacity-100 transition-opacity text-2xl"></i></div>
+                </div>
+            </div>
+            <div class="text-center mt-8">
+                <button class="border border-primary text-primary px-6 py-2 rounded-full text-sm font-semibold hover:bg-primary hover:text-white transition-colors">Muat Lebih Banyak</button>
+            </div>
+        </div>
+    </section>
+
+    <footer id="kontak" class="bg-textDark text-white pt-20 pb-8 mt-12 border-t-[6px] border-accent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+            <div>
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white text-xl">
+                        <i class="fa-solid fa-book-quran"></i>
+                    </div>
+                    <h2 class="font-bold text-lg text-white">MAS MANBA'USSALAM</h2>
+                </div>
+                <p class="text-gray-400 text-sm mb-6 leading-relaxed">Lembaga pendidikan Islam modern yang berkomitmen mencetak generasi unggul dalam keimanan, keilmuan, dan amal shaleh di era digital.</p>
+                <div class="flex gap-3">
+                    <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary transition-colors text-sm"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary transition-colors text-sm"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-primary transition-colors text-sm"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="font-bold text-sm uppercase tracking-wider mb-6 border-b border-gray-700 pb-2 inline-block text-accent">Hubungi Kami</h3>
+                <ul class="space-y-4 text-sm text-gray-400">
+                    <li class="flex items-start gap-3">
+                        <i class="fa-solid fa-location-dot mt-1 text-primary"></i>
+                        <span>Jl. Pendidikan No. 123, Kec. Cikande, Banten, Indonesia</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i class="fa-solid fa-phone text-primary"></i>
+                        <span>(0254) 1234567</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i class="fa-brands fa-whatsapp text-primary"></i>
+                        <span>0812-3456-7890 (Admin PMB)</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i class="fa-solid fa-envelope text-primary"></i>
+                        <span>info@masmanbaussalam.sch.id</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="font-bold text-sm uppercase tracking-wider mb-6 border-b border-gray-700 pb-2 inline-block text-accent">Sistem Informasi</h3>
+                <ul class="space-y-3 text-sm text-gray-400">
+                    <li><a href="#" id="foot-link-portal" class="hover:text-accent transition-colors flex items-center gap-2"><i class="fa-solid fa-angle-right text-[10px]"></i> Portal Aplikasi Utama</a></li>
+                    <li><a href="#" id="foot-link-pmb" class="hover:text-accent transition-colors flex items-center gap-2"><i class="fa-solid fa-angle-right text-[10px]"></i> Pendaftaran Siswa Baru</a></li>
+                    <li><a href="#" id="foot-link-verifikasi" class="hover:text-accent transition-colors flex items-center gap-2"><i class="fa-solid fa-angle-right text-[10px]"></i> Verifikasi Ijazah Alumni</a></li>
+                    <li><a href="admin/index.html" class="hover:text-primary transition-colors flex items-center gap-2 mt-4 text-gray-600"><i class="fa-solid fa-lock text-[10px]"></i> Login CMS Humas</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="border-t border-gray-800 pt-8 text-center text-xs text-gray-500 flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p>&copy; 2026 MAS MANBA'USSALAM. Hak Cipta Dilindungi.</p>
+            <p class="mt-2 md:mt-0">Ditenagai oleh Ekosistem Digital Open-Source.</p>
+        </div>
     </footer>
 
     <script>
-        // 1. Definisikan Username GitHub Anda
+        // --- 1. LOGIKA SAKLAR RUTE (URL CONFIG) ---
         const GITHUB_USER = 'mbs163'; 
         
-        // 2. Setting Jalur (Akan diganti ke custom domain di masa depan)
         const CONFIG = {
-            // Mode Aktif: GitHub Pages Standard Route
+            // Mode Aktif: GitHub Pages
             portalAppBase: `https://${GITHUB_USER}.github.io/portal-app/`
-            
-            // Mode Custom Domain Nanti:
-            // portalAppBase: "https://app.masmanbaussalam.sch.id/"
+            // Nanti jika pakai custom domain: "https://app.masmanbaussalam.sch.id/"
         };
 
-        // 3. Pasang link ke tombol-tombol yang mengarah ke Repo Portal
+        // Pasang link dinamis ke tombol (Desktop & Mobile)
         document.getElementById('btn-nav-portal').href = CONFIG.portalAppBase;
         document.getElementById('btn-hero-portal').href = CONFIG.portalAppBase;
-        document.getElementById('btn-hero-pmb').href = CONFIG.portalAppBase + "pmb/index.html"; // Mengarah ke folder PMB di repo portal
+        document.getElementById('btn-hero-pmb').href = CONFIG.portalAppBase + "pmb/index.html";
+        document.getElementById('btn-mobile-portal').href = CONFIG.portalAppBase; // Tombol di menu mobile
+        
+        // Pasang link dinamis ke footer
+        document.getElementById('foot-link-portal').href = CONFIG.portalAppBase;
+        document.getElementById('foot-link-pmb').href = CONFIG.portalAppBase + "pmb/index.html";
+        document.getElementById('foot-link-verifikasi').href = CONFIG.portalAppBase + "verifikasi/index.html";
+
+
+        // --- 2. LOGIKA MENU MOBILE (HAMBURGER) ---
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const icon = mobileBtn.querySelector('i');
+
+        // Buka/Tutup menu saat tombol ditekan
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            
+            if (mobileMenu.classList.contains('hidden')) {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            } else {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            }
+        });
+
+        // Tutup otomatis saat link di dalam menu mobile diklik
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            });
+        });
     </script>
 </body>
 </html>
