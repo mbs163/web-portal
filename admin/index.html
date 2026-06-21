@@ -20,20 +20,36 @@
 </head>
 <body class="bg-bgLight text-textDark font-sans flex h-screen overflow-hidden">
 
-    <aside class="w-64 bg-primary text-white flex flex-col hidden lg:flex border-r border-white/5 shadow-xl">
-        <div class="h-20 flex items-center px-6 gap-3 border-b border-white/10 bg-black/10">
+    <!-- OVERLAY GELAP UNTUK MOBILE (Meredupkan background saat menu terbuka) -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden transition-opacity"></div>
+
+    <!-- SIDEBAR (Menu Samping) -->
+    <aside id="sidebar" class="w-64 bg-primary text-white flex flex-col fixed inset-y-0 left-0 z-50 transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 shadow-2xl lg:shadow-xl border-r border-white/5">
+        
+        <!-- Header Sidebar -->
+        <div class="h-20 flex items-center px-6 gap-3 border-b border-white/10 bg-black/10 flex-shrink-0">
             <div class="w-8 h-8 bg-accent text-primary rounded-lg flex items-center justify-center font-bold"><i class="fa-solid fa-lock"></i></div>
             <div>
                 <h1 class="font-bold text-sm tracking-wide">CMS WEBSITE</h1>
                 <p class="text-[10px] text-gray-400">MAS MANBA'USSALAM</p>
             </div>
+            <!-- Tombol Tutup Sidebar di Mobile -->
+            <button id="close-sidebar-btn" class="lg:hidden ml-auto text-gray-400 hover:text-white focus:outline-none">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
         </div>
-        <nav class="flex-1 px-4 py-6 space-y-1">
+
+        <!-- Menu Navigasi -->
+        <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
             <a href="#" class="flex items-center gap-3 bg-white/10 text-accent px-4 py-3 rounded-xl font-semibold text-sm transition-all"><i class="fa-solid fa-chart-pie w-5 text-accent"></i> Dashboard</a>
             <a href="#" class="flex items-center gap-3 text-gray-400 hover:bg-white/5 hover:text-white px-4 py-3 rounded-xl font-medium text-sm transition-all"><i class="fa-solid fa-newspaper w-5"></i> Kelola Berita</a>
             <a href="#" class="flex items-center gap-3 text-gray-400 hover:bg-white/5 hover:text-white px-4 py-3 rounded-xl font-medium text-sm transition-all"><i class="fa-solid fa-images w-5"></i> Kelola Galeri</a>
+            <a href="#" class="flex items-center gap-3 text-gray-400 hover:bg-white/5 hover:text-white px-4 py-3 rounded-xl font-medium text-sm transition-all"><i class="fa-solid fa-address-card w-5"></i> Kelola Profil</a>
         </nav>
-        <div class="p-4 border-t border-white/5">
+
+        <!-- Menu Bawah Sidebar -->
+        <div class="p-4 border-t border-white/5 flex-shrink-0">
+            <!-- Link Relatif untuk kembali ke halaman depan website publik -->
             <a href="../index.html" class="flex items-center gap-3 text-gray-400 hover:text-white w-full px-4 py-3 rounded-xl font-medium text-sm transition-colors mb-2 border border-gray-600 border-dashed">
                 <i class="fa-solid fa-globe w-5"></i> Lihat Web Publik
             </a>
@@ -41,42 +57,129 @@
         </div>
     </aside>
 
-    <main class="flex-1 flex flex-col h-screen overflow-y-auto">
-        <header class="h-20 bg-white shadow-sm flex items-center justify-between px-8 sticky top-0 z-40">
-            <div>
-                <h2 class="font-bold text-lg text-primary">Dashboard Humas</h2>
-                <p class="text-xs text-gray-400">Kelola konten publik website sekolah</p>
-            </div>
+    <!-- KONTEN UTAMA (Kanan) -->
+    <div class="flex-1 flex flex-col h-screen overflow-hidden">
+        
+        <!-- HEADER KONTEN -->
+        <header class="h-20 bg-white shadow-sm flex items-center justify-between px-4 sm:px-8 flex-shrink-0 z-30 relative">
             <div class="flex items-center gap-4">
-                <div class="text-right">
-                    <p class="text-xs font-bold text-primary">Operator Utama</p>
+                <!-- Tombol Garis Tiga (Hamburger) HANYA TAMPIL DI MOBILE -->
+                <button id="mobile-menu-btn" class="lg:hidden text-primary hover:text-accent text-xl focus:outline-none transition-colors">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div>
+                    <h2 class="font-bold text-base sm:text-lg text-primary">Dashboard Humas</h2>
+                    <p class="text-[10px] sm:text-xs text-gray-400">Kelola konten publik website sekolah</p>
                 </div>
-                <div class="w-10 h-10 bg-primary/5 text-primary rounded-xl border border-gray-100 flex items-center justify-center font-bold"><i class="fa-solid fa-user-gear"></i></div>
+            </div>
+
+            <!-- Profil User Kanan Atas -->
+            <div class="flex items-center gap-3">
+                <div class="text-right hidden sm:block">
+                    <p class="text-xs font-bold text-primary">Operator Utama</p>
+                    <p class="text-[10px] text-green-500 font-semibold"><span class="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-1 animate-pulse"></span> Online</p>
+                </div>
+                <div class="w-10 h-10 bg-primary/5 text-primary rounded-xl border border-gray-100 flex items-center justify-center font-bold shadow-sm">
+                    <i class="fa-solid fa-user-gear"></i>
+                </div>
             </div>
         </header>
 
-        <div class="p-8 max-w-5xl w-full mx-auto">
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
-                    <div><p class="text-[11px] text-gray-400 font-bold uppercase tracking-wider mb-1">Total Berita</p><p class="text-2xl font-black text-primary">24</p></div>
-                    <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg"><i class="fa-solid fa-file-invoice"></i></div>
+        <!-- AREA SCROLL KONTEN + FOOTER -->
+        <main class="flex-1 overflow-y-auto bg-bgLight flex flex-col">
+            
+            <!-- Dashboard Widgets (Fleksibel memanjang ke bawah) -->
+            <div class="p-4 sm:p-8 max-w-5xl w-full mx-auto flex-1">
+                
+                <!-- Statistik Card -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow">
+                        <div><p class="text-[11px] text-gray-400 font-bold uppercase tracking-wider mb-1">Total Berita</p><p class="text-2xl font-black text-primary">24</p></div>
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg"><i class="fa-solid fa-file-invoice"></i></div>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow">
+                        <div><p class="text-[11px] text-gray-400 font-bold uppercase tracking-wider mb-1">Foto Galeri</p><p class="text-2xl font-black text-primary">86</p></div>
+                        <div class="w-10 h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center text-lg"><i class="fa-solid fa-photo-film"></i></div>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow sm:col-span-2 md:col-span-1">
+                        <div><p class="text-[11px] text-gray-400 font-bold uppercase tracking-wider mb-1">Kunjungan</p><p class="text-2xl font-black text-primary">1.2K</p></div>
+                        <div class="w-10 h-10 rounded-xl bg-yellow-50 text-accent flex items-center justify-center text-lg"><i class="fa-solid fa-chart-line"></i></div>
+                    </div>
                 </div>
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
-                    <div><p class="text-[11px] text-gray-400 font-bold uppercase tracking-wider mb-1">Foto Galeri</p><p class="text-2xl font-black text-primary">86</p></div>
-                    <div class="w-10 h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center text-lg"><i class="fa-solid fa-photo-film"></i></div>
+
+                <!-- Tabel Data Terbaru -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+                    <div class="px-5 sm:px-6 py-4 sm:py-5 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
+                        <h3 class="font-bold text-sm text-primary">Postingan Berita Terakhir</h3>
+                        <button class="bg-primary text-white px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-opacity-90 transition-colors shadow-sm">
+                            <i class="fa-solid fa-plus mr-1"></i> Tulis Baru
+                        </button>
+                    </div>
+                    
+                    <!-- Pembungkus agar tabel bisa di-scroll horizontal di HP kecil -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[500px]">
+                            <thead>
+                                <tr class="text-[11px] text-gray-400 uppercase tracking-wider border-b bg-white font-bold">
+                                    <th class="py-3 px-5 sm:px-6">Judul Artikel</th>
+                                    <th class="py-3 px-5 sm:px-6">Tanggal</th>
+                                    <th class="py-3 px-5 sm:px-6">Status</th>
+                                    <th class="py-3 px-5 sm:px-6 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-xs font-medium text-gray-600">
+                                <tr class="border-b hover:bg-gray-50/50 transition-colors">
+                                    <td class="py-4 px-5 sm:px-6 text-primary font-bold">Santri MAS Manba'ussalam Meraih Medali...</td>
+                                    <td class="py-4 px-5 sm:px-6 text-gray-500">24 Okt 2026</td>
+                                    <td class="py-4 px-5 sm:px-6"><span class="bg-green-50 text-green-700 px-2.5 py-1 rounded-md text-[10px] font-bold border border-green-100">Terbit</span></td>
+                                    <td class="py-4 px-5 sm:px-6 text-center">
+                                        <button class="text-blue-600 hover:text-blue-800 mr-2"><i class="fa-solid fa-pen-to-square"></i></button>
+                                        <button class="text-red-600 hover:text-red-800"><i class="fa-solid fa-trash-can"></i></button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50/50 transition-colors">
+                                    <td class="py-4 px-5 sm:px-6 text-primary font-bold">Peringatan Maulid Nabi Muhammad SAW...</td>
+                                    <td class="py-4 px-5 sm:px-6 text-gray-500">12 Okt 2026</td>
+                                    <td class="py-4 px-5 sm:px-6"><span class="bg-green-50 text-green-700 px-2.5 py-1 rounded-md text-[10px] font-bold border border-green-100">Terbit</span></td>
+                                    <td class="py-4 px-5 sm:px-6 text-center">
+                                        <button class="text-blue-600 hover:text-blue-800 mr-2"><i class="fa-solid fa-pen-to-square"></i></button>
+                                        <button class="text-red-600 hover:text-red-800"><i class="fa-solid fa-trash-can"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <div class="px-6 py-5 border-b border-gray-100 bg-gray-50/50">
-                    <h3 class="font-bold text-sm text-primary">Postingan Berita Terakhir</h3>
-                </div>
-                <div class="p-6 text-sm text-gray-500">
-                    Sistem database konten (berita/galeri) akan dihubungkan ke Google Sheets pada tahap _backend development_.
-                </div>
-            </div>
-        </div>
-    </main>
+            <!-- FOOTER ADMIN -->
+            <footer class="bg-white border-t border-gray-200 py-4 px-6 text-center sm:text-left flex flex-col sm:flex-row justify-between items-center text-[11px] text-gray-500 flex-shrink-0">
+                <p>&copy; 2026 MAS MANBA'USSALAM. Hak Cipta Dilindungi.</p>
+                <p class="mt-1 sm:mt-0">CMS v1.0 &middot; <span class="text-green-500 font-semibold">Sistem Stabil</span></p>
+            </footer>
 
+        </main>
+    </div>
+
+    <!-- SCRIPT LOGIKA SIDEBAR MOBILE -->
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        const openBtn = document.getElementById('mobile-menu-btn');
+        const closeBtn = document.getElementById('close-sidebar-btn');
+
+        // Fungsi untuk membuka / menutup sidebar
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full'); // Geser sidebar ke dalam layar
+            overlay.classList.toggle('hidden'); // Tampilkan overlay gelap
+        }
+
+        // Jalankan fungsi saat tombol diklik
+        openBtn.addEventListener('click', toggleSidebar);
+        closeBtn.addEventListener('click', toggleSidebar);
+        
+        // Tutup otomatis jika area gelap (overlay) diklik
+        overlay.addEventListener('click', toggleSidebar);
+    </script>
 </body>
 </html>
