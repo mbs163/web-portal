@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data PMB | Admin MANBA'USSALAM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = { theme: { extend: { colors: { primary: '#0B1F3B', accent: '#D4AF37' } } } }
+
+        // ==========================================
+        // GATEKEEPER: Cek apakah yang buka ini Admin?
+        // ==========================================
+       if (localStorage.getItem('userRole') !== 'admin') {
+    alert("Akses Ilegal! Anda bukan Admin.");
+    window.location.href = 'https://mbs163.github.io/portal-app/login.html'; // TENDANG KE REPO SEBELAH
+}
+    </script>
+</head>
+<body class="bg-slate-50 font-sans min-h-screen p-6">
+
+    <div class="max-w-6xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100 mt-10">
+        
+        <div class="bg-primary p-6 text-white flex justify-between items-center">
+            <div>
+                <h2 class="text-2xl font-extrabold mb-1">Data Pendaftar PMB</h2>
+                <p class="text-slate-300 text-sm">Real-time sinkronisasi dengan Database Pusat</p>
+            </div>
+            <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-bold text-sm transition-colors">
+                <i class="fa-solid fa-power-off mr-2"></i> Keluar
+            </button>
+        </div>
+
+        <div class="p-6 overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-100 text-slate-600 text-sm uppercase tracking-wider">
+                        <th class="p-4 font-bold rounded-tl-xl">Waktu Daftar</th>
+                        <th class="p-4 font-bold">NISN</th>
+                        <th class="p-4 font-bold">Nama Lengkap</th>
+                        <th class="p-4 font-bold">Asal Sekolah</th>
+                        <th class="p-4 font-bold rounded-tr-xl">No. WhatsApp</th>
+                    </tr>
+                </thead>
+                <tbody id="tabel-pmb" class="divide-y divide-slate-100">
+                    <tr>
+                        <td colspan="5" class="p-8 text-center text-slate-400">
+                            <i class="fa-solid fa-circle-notch fa-spin text-3xl mb-2 text-primary"></i>
+                            <p>Mengambil data dari server...</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi untuk mengambil data dari GAS
+        async function loadData() {
+            // ⚠️ GANTI URL INI DENGAN URL WEB APP ANDA
+            const GAS_URL = "https://script.google.com/macros/s/AKfycbw_6Q-M6_pvGLUZH4IFtefxa3iwStdhyD7nii4lFIMAyYaILCfnbLOp6DnuWChG2HRmpw/exec"; 
+            
+            // Tambahkan parameter ?action=getPMB di akhir URL
+            const FETCH_URL = GAS_URL + "?action=getPMB"; 
+
+            try {
+                const response = await fetch(FETCH_URL);
+                const result = await response.json();
+
+                const tbody = document.getElementById('tabel-pmb');
+                tbody.innerHTML = ''; // Bersihkan loading
+
+                if (result.data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Belum ada data pendaftar.</td></tr>`;
+                    return;
+                }
+
+                // Masukkan data ke dalam tabel
+                result.data.forEach(pendaftar => {
+                    const row = `
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="p-4 text-sm text-slate-500">${pendaftar.waktu}</td>
+                            <td class="p-4 font-bold text-primary">${pendaftar.nisn}</td>
+                            <td class="p-4 font-semibold">${pendaftar.nama}</td>
+                            <td class="p-4 text-sm text-slate-600">${pendaftar.asal_sekolah}</td>
+                            <td class="p-4">
+                                <a href="https://wa.me/${pendaftar.no_hp}" target="_blank" class="text-green-600 font-bold hover:underline flex items-center gap-2">
+                                    <i class="fa-brands fa-whatsapp text-lg"></i> ${pendaftar.no_hp}
+                                </a>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+
+            } catch (error) {
+                document.getElementById('tabel-pmb').innerHTML = `<tr><td colspan="5" class="p-6 text-center text-red-500 font-bold">Gagal mengambil data. Periksa koneksi.</td></tr>`;
+            }
+        }
+
+        // Fungsi Logout
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'https://mbs163.github.io/portal-app/login.html';
+        }
+
+        // Jalankan saat halaman dibuka
+        loadData();
+    </script>
+</body>
+</html>
