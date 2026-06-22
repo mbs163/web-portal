@@ -17,6 +17,14 @@
             }
         }
     </script>
+    <script>
+    // PENJAGA PINTU (Security Guard)
+    // Jika tidak ada data login, ATAU role-nya bukan admin, tendang balik!
+    const role = localStorage.getItem('userRole');
+    if (!role || role !== 'admin') {
+        window.location.href = 'https://mbs163.github.io/portal-app/login.html';
+    }
+</script>
 </head>
 <body class="bg-bgLight text-textDark font-sans antialiased scroll-smooth relative">
 
