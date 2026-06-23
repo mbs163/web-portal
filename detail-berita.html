@@ -1,131 +1,41 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Berita | MAS MANBA'USSALAM</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: { primary: '#0F766E', accent: '#D4AF37', bgLight: '#F9FAFB', textDark: '#111827' },
-                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] }
-                }
-            }
-        }
-    </script>
-</head>
-<body class="bg-bgLight text-textDark font-sans antialiased">
+<!-- Ganti bagian dalam <nav> breadcrumb dengan ini -->
+<div id="breadcrumb" class="text-xs font-bold text-slate-400 uppercase tracking-widest">
+    <a href="index.html" class="hover:text-primary">Beranda</a> > <span id="bread-kat" class="text-primary">Warta</span>
+</div>
 
-    <!-- NAVIGASI -->
-    <nav class="bg-white shadow-sm sticky top-0 z-50 h-20 flex items-center border-b border-slate-100">
-        <div class="max-w-4xl mx-auto w-full px-4 flex justify-between items-center">
-            <a href="index.html" class="flex items-center gap-2 text-primary font-bold text-sm hover:text-emerald-800 transition-colors">
-                <i class="fa-solid fa-arrow-left"></i> Beranda
-            </a>
-            <div id="breadcrumb" class="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                Warta Madrasah
-            </div>
+<!-- Ganti bagian Tombol Share dengan ini -->
+<div class="flex gap-3 mb-10 flex-wrap">
+    <span class="text-xs font-bold text-slate-400 self-center uppercase tracking-widest mr-2">Share:</span>
+    <button onclick="shareSocial('wa')" class="bg-emerald-500 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-emerald-600"><i class="fa-brands fa-whatsapp mr-1"></i> WA</button>
+    <button onclick="shareSocial('fb')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-blue-700"><i class="fa-brands fa-facebook mr-1"></i> FB</button>
+    <button onclick="shareSocial('x')" class="bg-slate-800 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-black"><i class="fa-brands fa-x-twitter mr-1"></i> X</button>
+</div>
+
+<!-- Footer (Ganti footer lama dengan ini) -->
+<footer class="bg-white border-t border-slate-200 py-12 mt-12">
+    <div class="max-w-4xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
+        <div>
+            <h4 class="font-bold text-primary mb-2">MAS MANBA'USSALAM</h4>
+            <p class="text-slate-500 text-xs">Cikande, Banten, Indonesia</p>
         </div>
-    </nav>
-
-    <main class="max-w-4xl mx-auto px-4 py-12">
-        <article class="bg-white rounded-3xl p-6 sm:p-10 shadow-xl border border-slate-100">
-            <!-- Loading State -->
-            <div id="loading" class="text-center py-12 text-slate-400">
-                <i class="fa-solid fa-circle-notch fa-spin text-2xl mb-2 text-primary"></i>
-                <p class="text-sm">Membuka lembaran warta...</p>
-            </div>
-
-            <div id="content-area" class="hidden">
-                <span id="art-kategori" class="inline-block bg-emerald-50 text-primary text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4"></span>
-                <h1 id="art-judul" class="text-2xl sm:text-4xl font-extrabold text-slate-900 leading-tight mb-4"></h1>
-                
-                <div class="flex items-center gap-4 text-xs text-slate-400 mb-8 pb-6 border-b border-slate-100">
-                    <span><i class="fa-regular fa-calendar mr-1"></i> <span id="art-tanggal"></span></span>
-                    <span><i class="fa-regular fa-user mr-1"></i> Humas MAS Manba'ussalam</span>
-                </div>
-
-                <div class="w-full aspect-[16/9] rounded-2xl overflow-hidden mb-8 shadow-md">
-                    <img id="art-gambar" src="" alt="Cover" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/800x450?text=MAS+Manbaussalam'">
-                </div>
-
-                <div id="art-konten" class="text-slate-700 leading-relaxed text-base space-y-4 whitespace-pre-line"></div>
-
-                <!-- Footer Artikel (Editor & Share) -->
-                <div class="mt-12 pt-8 border-t border-slate-100">
-                    <div class="text-sm text-slate-500 italic mb-6">Editor: <span class="font-bold text-primary">Alif Mathuf</span></div>
-                    
-                    <div class="flex gap-3 mb-10 flex-wrap">
-                        <span class="text-xs font-bold text-slate-400 self-center uppercase tracking-widest mr-2">Share:</span>
-                        <button onclick="shareWhatsApp()" class="bg-emerald-500 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-emerald-600 transition-all"><i class="fa-brands fa-whatsapp mr-1"></i> WhatsApp</button>
-                        <button onclick="copyLink()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-xs font-bold hover:bg-slate-300 transition-all"><i class="fa-solid fa-link mr-1"></i> Salin Link</button>
-                    </div>
-
-                    <!-- Rekomendasi Baca Juga -->
-                    <div id="rekomendasi-box" class="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-                        <h4 class="font-bold text-primary mb-4 uppercase tracking-wider text-xs">Baca Juga Lainnya</h4>
-                        <ul id="list-rekomendasi" class="space-y-3"></ul>
-                    </div>
-                </div>
-            </div>
-        </article>
-    </main>
-
-    <footer class="py-8 text-center text-xs text-slate-400 border-t border-slate-200 mt-12 bg-white">
+        <div class="flex flex-col gap-2">
+            <h4 class="font-bold text-primary mb-2">Link Cepat</h4>
+            <a href="index.html" class="text-slate-500 hover:text-primary text-xs">Beranda</a>
+            <a href="#" class="text-slate-500 hover:text-primary text-xs">Data Siswa</a>
+        </div>
+    </div>
+    <div class="text-center text-xs text-slate-400 mt-8 border-t pt-8">
         © 2026 MAS Manba'ussalam &bull; Digital Ecosystem Integrated
-    </footer>
+    </div>
+</footer>
 
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const slug = urlParams.get('slug');
-
-        if (!slug) window.location.href = 'index.html';
-
-        fetch('data/berita.json')
-        .then(res => res.json())
-        .then(beritaList => {
-            const artikel = beritaList.find(item => item.slug === slug);
-            if (!artikel) {
-                document.getElementById('loading').innerHTML = `<i class="fa-solid fa-file-circle-xmark text-red-400 text-3xl mb-2"></i><p class="text-sm font-bold">Artikel tidak ditemukan.</p>`;
-                return;
-            }
-
-            document.getElementById('art-kategori').innerText = artikel.kategori;
-            document.getElementById('breadcrumb').innerText = `Warta > ${artikel.kategori}`;
-            document.getElementById('art-judul').innerText = artikel.judul;
-            document.getElementById('art-tanggal').innerText = artikel.tanggal;
-            document.getElementById('art-gambar').src = artikel.gambar;
-            document.getElementById('art-konten').innerText = artikel.konten;
-
-            // Render Baca Juga (Random 2 artikel selain artikel ini)
-            const rekomendasi = beritaList.filter(item => item.slug !== slug).sort(() => 0.5 - Math.random()).slice(0, 2);
-            const listRekom = document.getElementById('list-rekomendasi');
-            if(rekomendasi.length > 0) {
-                listRekom.innerHTML = rekomendasi.map(item => `
-                    <li><a href="detail-berita.html?slug=${item.slug}" class="text-primary hover:underline font-medium text-sm flex items-center gap-2">
-                    <i class="fa-solid fa-newspaper text-slate-300"></i> ${item.judul}</a></li>
-                `).join('');
-            } else {
-                document.getElementById('rekomendasi-box').classList.add('hidden');
-            }
-
-            document.getElementById('loading').classList.add('hidden');
-            document.getElementById('content-area').classList.remove('hidden');
-            document.title = `${artikel.judul} | MAS MANBA'USSALAM`;
-        });
-
-        function shareWhatsApp() {
-            window.open(`https://wa.me/?text=Baca berita menarik ini di MAS Manba'ussalam: ${window.location.href}`, '_blank');
-        }
-        function copyLink() {
-            navigator.clipboard.writeText(window.location.href);
-            Swal.fire({ icon: 'success', title: 'Link disalin!', timer: 1500, showConfirmButton: false });
-        }
-    </script>
-</body>
-</html>
+<!-- Tambahkan script share di bagian bawah -->
+<script>
+    function shareSocial(type) {
+        const url = window.location.href;
+        const text = "Lihat berita menarik di MAS Manba'ussalam";
+        if(type === 'wa') window.open(`https://wa.me/?text=${text}: ${url}`, '_blank');
+        if(type === 'fb') window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+        if(type === 'x') window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
+    }
+</script>
