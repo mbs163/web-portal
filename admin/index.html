@@ -3,120 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | MAS MANBA'USSALAM</title>
+    <title>Master Dashboard | Admin MAS MANBA'USSALAM</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
-        tailwind.config = { theme: { extend: { colors: { primary: '#0B1F3B', accent: '#D4AF37' } } } }
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#0B1F3B', accent: '#D4AF37', bgLight: '#F8FAFC', textDark: '#0F172A' },
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] }
+                }
+            }
+        }
 
-        // ==========================================
-        // GATEKEEPER: Cek apakah ini Admin?
-        // ==========================================
-        if (localStorage.getItem('userRole') !== 'admin') {
-            // ⚠️ GANTI [username-github-anda] DENGAN USERNAME GITHUB ANDA
-            window.location.href = 'https://mbs163.github.io/portal-app/login.html'; 
+        // Penjaga Keamanan
+        const role = localStorage.getItem('userRole');
+        if (!role || role !== 'admin') {
+            window.location.href = 'https://mbs163.github.io/portal-app/login.html';
         }
     </script>
 </head>
-<body class="bg-slate-50 font-sans min-h-screen">
+<body class="bg-bgLight text-textDark font-sans antialiased flex h-screen overflow-hidden">
 
-    <nav class="bg-primary text-white shadow-xl relative z-20">
-        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 pointer-events-none"></div>
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center relative z-10">
-            <div class="flex items-center gap-4">
-                <div class="w-10 h-10 bg-accent text-primary rounded-xl flex items-center justify-center font-bold text-lg shadow-lg">M</div>
-                <div>
-                    <h1 class="font-extrabold text-xl tracking-wide">Pusat Kendali Admin</h1>
-                    <p class="text-xs text-slate-300">Web Portal MANBA'USSALAM</p>
-                </div>
+    <aside class="w-64 bg-primary text-white flex flex-col h-full overflow-y-auto shadow-2xl z-20 flex-shrink-0 hidden md:flex">
+        <div class="p-6 flex items-center gap-3 border-b border-white/10 sticky top-0 bg-primary z-10">
+            <div class="w-10 h-10 bg-accent rounded-xl flex items-center justify-center text-primary text-xl font-bold">
+                <i class="fa-solid fa-shield-halved"></i>
             </div>
-            
-            <div class="flex items-center gap-6">
-                <div class="hidden md:block text-right">
-                    <p class="text-sm font-bold text-accent" id="admin-name">Admin Web</p>
-                    <p class="text-xs text-slate-300">Administrator</p>
-                </div>
-                <button onclick="logout()" class="bg-slate-800 hover:bg-red-600 text-white w-10 h-10 rounded-xl transition-colors flex items-center justify-center shadow-md">
-                    <i class="fa-solid fa-power-off"></i>
-                </button>
+            <div>
+                <h2 class="font-bold tracking-wide leading-tight">Admin Portal</h2>
+                <p class="text-[10px] text-accent uppercase tracking-widest">MAS Manba'ussalam</p>
             </div>
         </div>
-    </nav>
 
-    <main class="max-w-7xl mx-auto px-6 py-10">
+        <div class="flex-1 py-6 px-4 space-y-8">
+            
+            <div>
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 px-2">Web Portal (Statis)</h3>
+                <ul class="space-y-1">
+                    <li>
+                        <a href="profil.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-white/10 transition-all">
+                            <i class="fa-solid fa-building-columns w-5 text-center"></i> Profil & Visi Misi
+                        </a>
+                    </li>
+                    <li class="group">
+                        <div class="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-white/10 transition-all cursor-pointer">
+                            <span class="flex items-center gap-3"><i class="fa-solid fa-newspaper w-5 text-center"></i> Berita Web</span>
+                            <i class="fa-solid fa-chevron-down text-xs opacity-50"></i>
+                        </div>
+                        <ul class="pl-11 pr-3 py-1 space-y-1 hidden group-hover:block">
+                            <li><a href="berita.html" class="block py-1 text-xs text-slate-400 hover:text-accent">Tulis Berita Baru</a></li>
+                            <li><a href="#" class="block py-1 text-xs text-slate-400 hover:text-accent">Kelola Kategori</a></li>
+                        </ul>
+                    </li>
+                    <li class="group">
+                        <div class="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-white/10 transition-all cursor-pointer">
+                            <span class="flex items-center gap-3"><i class="fa-solid fa-images w-5 text-center"></i> Galeri Foto</span>
+                            <i class="fa-solid fa-chevron-down text-xs opacity-50"></i>
+                        </div>
+                        <ul class="pl-11 pr-3 py-1 space-y-1 hidden group-hover:block">
+                            <li><a href="galeri.html" class="block py-1 text-xs text-slate-400 hover:text-accent">Upload Foto</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 px-2">Sistem Aplikasi (Dinamis)</h3>
+                <ul class="space-y-1">
+                    <li>
+                        <a href="admin-pmb.html" class="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-accent bg-white/10 font-bold hover:bg-white/20 transition-all shadow-inner border border-white/5">
+                            <span class="flex items-center gap-3"><i class="fa-solid fa-user-graduate w-5 text-center"></i> Data PMB</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </a>
+                    </li>
+                    <li class="group mt-1">
+                        <div class="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-white/10 transition-all cursor-pointer">
+                            <span class="flex items-center gap-3"><i class="fa-solid fa-id-card w-5 text-center"></i> SIMPEG</span>
+                            <i class="fa-solid fa-chevron-down text-xs opacity-50"></i>
+                        </div>
+                        <ul class="pl-11 pr-3 py-1 space-y-1 hidden group-hover:block border-l border-white/10 ml-5 mt-1">
+                            <li><a href="#" class="block py-1 text-xs text-slate-400 hover:text-accent">Data Guru & Staff</a></li>
+                        </ul>
+                    </li>
+                    <li class="group">
+                        <div class="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-white/10 transition-all cursor-pointer">
+                            <span class="flex items-center gap-3"><i class="fa-solid fa-certificate w-5 text-center"></i> Verifikasi Ijazah</span>
+                            <i class="fa-solid fa-chevron-down text-xs opacity-50"></i>
+                        </div>
+                        <ul class="pl-11 pr-3 py-1 space-y-1 hidden group-hover:block border-l border-white/10 ml-5 mt-1">
+                            <li><a href="#" class="block py-1 text-xs text-slate-400 hover:text-accent">Data Alumni</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
         
-        <div class="mb-10">
-            <h2 class="text-3xl font-extrabold text-slate-900">Selamat Datang, <span id="welcome-name" class="text-primary">Admin</span>!</h2>
-            <p class="text-slate-500 mt-2">Pilih modul di bawah ini untuk mulai mengelola data sistem dan website.</p>
+        <div class="p-4 border-t border-white/10">
+            <button onclick="logout()" class="w-full flex items-center justify-center gap-2 py-2.5 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white rounded-lg text-sm font-bold transition-all">
+                <i class="fa-solid fa-power-off"></i> Keluar Sistem
+            </button>
         </div>
+    </aside>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <main class="flex-1 flex flex-col h-full overflow-y-auto bg-slate-50">
+        
+        <header class="bg-white shadow-sm border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+            <div class="flex items-center gap-4">
+                <button class="md:hidden text-slate-500 hover:text-primary"><i class="fa-solid fa-bars text-xl"></i></button>
+                <h1 class="text-xl font-bold text-primary">Overview Sistem</h1>
+            </div>
+            <div class="text-sm font-medium text-slate-500 flex items-center gap-2 hidden sm:flex">
+                <i class="fa-regular fa-user mr-1"></i> <span id="admin-name">Admin Web</span>
+            </div>
+        </header>
+
+        <div class="p-6 sm:p-10 max-w-7xl mx-auto w-full">
             
-            <a href="admin-pmb.html" class="group bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-accent transition-all duration-300 relative overflow-hidden">
-                <div class="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:bg-primary group-hover:text-accent transition-colors">
-                    <i class="fa-solid fa-users"></i>
-                </div>
-                <h3 class="text-xl font-bold text-slate-900 mb-2">Data PMB</h3>
-                <p class="text-sm text-slate-500">Lihat, kelola, dan hubungi pendaftar siswa baru secara real-time.</p>
-                <div class="absolute bottom-8 right-8 text-slate-300 group-hover:text-accent transition-colors">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </div>
-            </a>
+            <div class="mb-10">
+                <h2 class="text-3xl font-extrabold text-slate-800 mb-2">Selamat Datang, <span id="welcome-name" class="text-primary">Admin</span>!</h2>
+                <p class="text-slate-500">Pusat kendali ekosistem digital MAS Manba'ussalam. Akses cepat menu Anda di bawah ini atau melalui sidebar kiri.</p>
+            </div>
 
-            <a href="berita.html" class="group bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-accent transition-all duration-300 relative overflow-hidden">
-                <div class="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:bg-primary group-hover:text-accent transition-colors">
-                    <i class="fa-solid fa-newspaper"></i>
-                </div>
-                <h3 class="text-xl font-bold text-slate-900 mb-2">Berita Web</h3>
-                <p class="text-sm text-slate-500">Posting pengumuman, artikel, dan kegiatan madrasah terbaru.</p>
-                <div class="absolute bottom-8 right-8 text-slate-300 group-hover:text-accent transition-colors">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </div>
-            </a>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+                
+                <a href="admin-pmb.html" class="group bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-emerald-500 transition-all duration-300 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-emerald-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                    <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-2xl mb-4 relative z-10">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-1 relative z-10">Sistem PMB</h3>
+                    <p class="text-xs text-slate-500 relative z-10">Kelola formulir pendaftar dari Google Apps Script.</p>
+                    <div class="mt-4 flex items-center text-xs font-bold text-emerald-600">
+                        Buka Panel PMB <i class="fa-solid fa-arrow-right ml-2 transition-transform group-hover:translate-x-1"></i>
+                    </div>
+                </a>
 
-            <a href="#" class="group bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-accent transition-all duration-300 relative overflow-hidden">
-                <div class="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:bg-primary group-hover:text-accent transition-colors">
-                    <i class="fa-solid fa-images"></i>
-                </div>
-                <h3 class="text-xl font-bold text-slate-900 mb-2">Galeri Foto</h3>
-                <p class="text-sm text-slate-500">Unggah dan kelola album foto dokumentasi kegiatan sekolah.</p>
-                <div class="absolute bottom-8 right-8 text-slate-300 group-hover:text-accent transition-colors">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </div>
-            </a>
+                <a href="berita.html" class="group bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-blue-500 transition-all duration-300 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-blue-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-2xl mb-4 relative z-10">
+                        <i class="fa-solid fa-newspaper"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-1 relative z-10">Tulis Berita</h3>
+                    <p class="text-xs text-slate-500 relative z-10">Generator JSON untuk portal warta madrasah.</p>
+                    <div class="mt-4 flex items-center text-xs font-bold text-blue-600">
+                        Buka Editor <i class="fa-solid fa-arrow-right ml-2 transition-transform group-hover:translate-x-1"></i>
+                    </div>
+                </a>
 
-            <a href="#" class="group bg-slate-100 p-8 rounded-3xl border border-slate-200 cursor-not-allowed relative overflow-hidden opacity-70">
-                <div class="w-14 h-14 bg-slate-300 text-slate-500 rounded-2xl flex items-center justify-center text-2xl mb-6">
-                    <i class="fa-solid fa-gears"></i>
+                <div class="group bg-slate-50 p-6 rounded-2xl border border-slate-200 relative overflow-hidden opacity-80 cursor-not-allowed">
+                    <div class="w-12 h-12 bg-slate-200 text-slate-500 rounded-xl flex items-center justify-center text-2xl mb-4">
+                        <i class="fa-solid fa-id-card-clip"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-1">SIMPEG</h3>
+                    <p class="text-xs text-slate-500">Sistem Informasi Kepegawaian.</p>
+                    <div class="absolute top-6 right-6 bg-slate-200 text-slate-600 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                        Segera Hadir
+                    </div>
                 </div>
-                <h3 class="text-xl font-bold text-slate-900 mb-2">Sistem Induk</h3>
-                <p class="text-sm text-slate-500">Manajemen akses Guru, Siswa, dan Kepala Sekolah.</p>
-                <div class="absolute top-8 right-8 bg-slate-300 text-slate-600 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                    Segera Hadir
-                </div>
-            </a>
+
+            </div>
 
         </div>
     </main>
 
-    <footer class="mt-auto py-8 text-center text-slate-400 text-xs font-semibold uppercase tracking-widest border-t border-slate-200">
-        &copy; 2026 MAS MANBA'USSALAM &bull; Web Portal Admin
-    </footer>
-
     <script>
-        // Setel nama Admin berdasarkan data dari Login (localStorage)
+        // Ambil nama Admin dari Login
         document.addEventListener("DOMContentLoaded", () => {
             const userName = localStorage.getItem('userName') || 'Administrator';
             document.getElementById('welcome-name').innerText = userName;
             document.getElementById('admin-name').innerText = userName;
         });
 
-        // Fungsi Logout
         function logout() {
-            localStorage.clear();
-            // ⚠️ GANTI [username-github-anda] DENGAN USERNAME GITHUB ANDA
-            window.location.href = 'https://mbs163.github.io/portal-app/login.html'; 
+            Swal.fire({
+                title: 'Keluar Sistem?',
+                text: "Anda akan diarahkan kembali ke halaman login utama.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#eef2ff',
+                cancelButtonColor: '#0B1F3B',
+                confirmButtonText: '<span style="color:#ef4444; font-weight:bold;">Ya, Keluar</span>',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('userRole');
+                    window.location.href = 'https://mbs163.github.io/portal-app/login.html';
+                }
+            })
         }
     </script>
 </body>
