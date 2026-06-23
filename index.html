@@ -119,24 +119,68 @@
         </div>
     </section>
 
-    <!-- PADDING: py-16 untuk berita agar kompak -->
-    <section id="berita" class="py-16 bg-bgLight">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-end mb-12">
-                <div>
-                    <h2 class="text-3xl font-bold text-primary mb-3">Berita & Pengumuman</h2>
-                    <div class="w-12 h-1 bg-accent rounded-full"></div>
-                </div>
-                <a href="#" class="text-primary font-semibold hover:text-accent transition-colors hidden sm:block text-sm">Lihat Semua Berita <i class="fa-solid fa-arrow-right ml-1"></i></a>
+   <section id="berita" class="py-16 bg-bgLight">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-end mb-12">
+            <div>
+                <h2 class="text-3xl font-bold text-primary mb-3">Berita & Pengumuman</h2>
+                <div class="w-12 h-1 bg-accent rounded-full"></div>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-               <div id="berita-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-    <!-- Berita akan muncul di sini secara otomatis -->
-</div>
-            </div>
+            <a href="arsip-berita.html" class="text-primary font-semibold hover:text-accent transition-colors hidden sm:block text-sm">Lihat Semua Berita <i class="fa-solid fa-arrow-right ml-1"></i></a>
         </div>
-    </section>
+
+        <div id="berita-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="text-center col-span-3 text-slate-400 py-8">Mengambil kabar madrasah...</div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Membaca file JSON lokal secara instan tanpa delay server pihak ketiga
+    fetch('data/berita.json')
+    .then(response => {
+        if (!response.ok) throw new Error('Gagal memuat berkas data berita');
+        return response.json();
+    })
+    .then(data => {
+        const container = document.getElementById('berita-container');
+        container.innerHTML = ''; // Bersihkan loader
+        
+        // Ambil maksimal 3 berita terbaru untuk ditaruh di homepage
+        const beritaTerbaru = data.slice(0, 3);
+
+        beritaTerbaru.forEach(b => {
+            // Membungkus seluruh elemen kartu berita dengan tag <a> agar bisa diklik seutuhnya
+            container.innerHTML += `
+                <a href="detail-berita.html?slug=${b.slug}" class="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group block">
+                    <div class="h-48 bg-slate-100 overflow-hidden relative">
+                        <img src="${b.gambar}" alt="${b.judul}" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" onerror="this.src='https://via.placeholder.com/600x400?text=MAS+Manbaussalam'">
+                    </div>
+                    <div class="p-6">
+                        <time class="text-xs text-slate-400 block mb-2 font-medium">
+                            <i class="fa-regular fa-calendar mr-1"></i> ${b.tanggal}
+                        </time>
+                        <h3 class="font-bold text-lg mb-2 text-slate-900 group-hover:text-primary transition-colors leading-tight line-clamp-2">
+                            ${b.judul}
+                        </h3>
+                        <p class="text-slate-500 text-sm mb-4 line-clamp-2">
+                            ${b.konten}
+                        </p>
+                        <span class="text-accent font-bold text-xs group-hover:text-primary transition-colors flex items-center gap-1 uppercase tracking-wider">
+                            Baca Selengkapnya <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </span>
+                    </div>
+                </a>`;
+        });
+    })
+    .catch(err => {
+        document.getElementById('berita-container').innerHTML = `
+            <div class="text-center col-span-3 py-8 text-slate-400">
+                <i class="fa-solid fa-triangle-exclamation text-amber-500 text-xl mb-2"></i>
+                <p class="text-sm">Gagal memuat berita terkini secara otomatis.</p>
+            </div>`;
+    });
+</script>
 
     <!-- PADDING: pt-10 (rapat) dan pb-20 (lega) -->
     <section id="galeri" class="pt-10 pb-20 bg-white">
