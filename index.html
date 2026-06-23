@@ -183,21 +183,36 @@
     </section>
 
     <!-- AOS ANIMATION: fade-up -->
-    <section id="berita" data-aos="fade-up" class="py-16 bg-bgLight">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-end mb-12">
-                <div>
-                    <h2 class="text-3xl font-bold text-primary mb-3">Berita & Pengumuman</h2>
-                    <div class="w-12 h-1 bg-accent rounded-full"></div>
-                </div>
-                <a href="arsip-berita.html" class="text-primary font-semibold hover:text-accent transition-colors hidden sm:block text-sm">Lihat Semua Berita <i class="fa-solid fa-arrow-right ml-1"></i></a>
+    <section id="berita" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- HEADER BERITA -->
+        <div class="flex justify-between items-end mb-10">
+            <div>
+                <h2 class="text-3xl font-bold text-slate-900 mb-2">Berita & Pengumuman</h2>
+                <div class="w-16 h-1.5 bg-primary rounded-full"></div>
             </div>
-
-            <div id="berita-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="text-center col-span-3 text-slate-400 py-8">Mengambil kabar madrasah...</div>
-            </div>
+            
+            <!-- Tombol "Lihat Semua" (Hanya muncul di Desktop/Tablet) -->
+            <a href="arsip-berita.html" class="hidden sm:flex items-center gap-2 text-primary font-bold hover:text-emerald-800 transition-all text-sm uppercase tracking-wider">
+                Lihat Semua <i class="fa-solid fa-arrow-right"></i>
+            </a>
         </div>
-    </section>
+
+        <!-- GRID BERITA (3 Kolom) -->
+        <div id="berita-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Data dimuat otomatis -->
+        </div>
+
+        <!-- TOMBOL KHUSUS MOBILE (Muncul di HP, Sembunyi di Desktop) -->
+        <div class="mt-10 sm:hidden block">
+            <a href="arsip-berita.html" class="block w-full py-4 bg-primary text-white text-center font-bold rounded-xl shadow-lg">
+                Lihat Semua Berita
+            </a>
+        </div>
+        
+    </div>
+</section>
 
     <!-- PENGOPTIMALAN SCRIPT BERITA (Script GAS yang duplikat dihapus) -->
     <script>
@@ -270,8 +285,10 @@
                 </div>
             </div>
             <div class="text-center mt-8">
-                <button class="border border-primary text-primary px-6 py-2 rounded-full text-sm font-semibold hover:bg-primary hover:text-white transition-colors">Muat Lebih Banyak</button>
-            </div>
+    <a href="galeri-lengkap.html" class="inline-block border border-primary text-primary px-6 py-2 rounded-full text-sm font-semibold hover:bg-primary hover:text-white transition-colors">
+        Muat Lebih Banyak
+    </a>
+</div>
         </div>
     </section>
 
