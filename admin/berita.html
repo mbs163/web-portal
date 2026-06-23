@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Manajemen Berita | Admin MBS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-5xl mx-auto">
+        <h2 class="text-2xl font-bold mb-6 text-primary">Manajemen Berita</h2>
+        
+        <!-- Form Tambah Berita -->
+        <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
+            <h3 class="font-bold mb-4">Tambah Berita Baru</h3>
+            <form id="beritaForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="text" id="judul" placeholder="Judul" required class="p-3 border rounded-lg">
+                <input type="date" id="tanggal" required class="p-3 border rounded-lg">
+                <input type="text" id="kategori" placeholder="Kategori" required class="p-3 border rounded-lg">
+                <input type="url" id="gambar" placeholder="Link Gambar" required class="p-3 border rounded-lg col-span-2">
+                <textarea id="konten" placeholder="Isi Berita" required class="p-3 border rounded-lg col-span-2 h-24"></textarea>
+                <button type="submit" class="bg-emerald-700 text-white p-3 rounded-lg font-bold col-span-2">Posting Berita</button>
+            </form>
+        </div>
+
+        <!-- Tabel Daftar Berita -->
+        <div class="bg-white p-6 rounded-xl shadow-sm">
+            <h3 class="font-bold mb-4">Daftar Berita Terkini</h3>
+            <div id="loading" class="text-center py-4">Memuat data...</div>
+            <table class="w-full text-left" id="tabelBerita">
+                <thead>
+                    <tr class="border-b">
+                        <th class="py-2">Judul</th>
+                        <th class="py-2">Tanggal</th>
+                        <th class="py-2">Kategori</th>
+                    </tr>
+                </thead>
+                <tbody id="listBerita"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const URL_GAS = "GANTI_DENGAN_URL_DEPLOYMENT_GAS_ANDA"; 
+
+        // Fungsi Tambah
+        document.getElementById('beritaForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                judul: document.getElementById('judul').value,
+                tanggal: document.getElementById('tanggal').value,
+                kategori: document.getElementById('kategori').value,
+                konten: document.getElementById('konten').value,
+                gambar: document.getElementById('gambar').value
+            };
+            await fetch(URL_GAS, { method: "POST", body: JSON.stringify(data) });
+            alert("Berita Berhasil Ditambahkan!");
+            window.location.reload();
+        });
+
+        // Fungsi Load Data
+        fetch(URL_GAS).then(res => res.json()).then(data => {
+            document.getElementById('loading').classList.add('hidden');
+            const tbody = document.getElementById('listBerita');
+            data.forEach(b => {
+                tbody.innerHTML += `<tr class="border-b"><td class="py-3">${b.judul}</td><td class="py-3">${b.tanggal}</td><td class="py-3">${b.kategori}</td></tr>`;
+            });
+        });
+    </script>
+</body>
+</html>
