@@ -81,83 +81,88 @@
         </div>
     </main>
 
-    <script>
-        let newsData = [];
+   <script>
+    let newsData = [];
 
-        // Load data
-        fetch('data/berita.json').then(r => r.json()).then(data => { newsData = data; renderTable(); });
-
-        function showTab(tab) {
-            document.getElementById('section-create').classList.toggle('hidden', tab !== 'create');
-            document.getElementById('section-list').classList.toggle('hidden', tab !== 'list');
-            document.getElementById('tab-create').className = tab === 'create' ? 'px-6 py-2 rounded-xl font-bold bg-primary text-white' : 'px-6 py-2 rounded-xl font-bold bg-white text-slate-500 border';
-            document.getElementById('tab-list').className = tab === 'list' ? 'px-6 py-2 rounded-xl font-bold bg-primary text-white' : 'px-6 py-2 rounded-xl font-bold bg-white text-slate-500 border';
-        }
-
-        function renderTable() {
-            const tbody = document.getElementById('news-table-body');
-            tbody.innerHTML = newsData.map(n => `
-                <tr class="border-b">
-                    <td class="p-3 font-medium">${n.judul}</td>
-                    <td class="p-3 text-slate-500">${n.kategori}</td>
-                    <td class="p-3 flex gap-2">
-                        <button onclick="editNews(${n.id})" class="text-blue-600 hover:underline">Edit</button>
-                        <button onclick="deleteNews(${n.id})" class="text-red-600 hover:underline">Hapus</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        document.getElementById('newsForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const id = document.getElementById('edit-id').value;
-            const newObj = {
-                id: id ? parseInt(id) : new Date().getTime(),
-                judul: document.getElementById('judul').value,
-                tanggal: document.getElementById('tanggal').value,
-                kategori: document.getElementById('kategori').value,
-                konten: document.getElementById('konten').value,
-                editor: document.getElementById('editor').value, // DATA EDITOR BARU
-                gambar: document.getElementById('gambar').value,
-                slug: document.getElementById('judul').value.toLowerCase().replace(/ /g,'-')
-            };
-
-            if (id) {
-                const index = newsData.findIndex(n => n.id == id);
-                newsData[index] = newObj;
-            } else {
-                newsData.unshift(newObj);
-            }
-            updateOutput();
-        });
-
-        function editNews(id) {
-            const news = newsData.find(n => n.id == id);
-            document.getElementById('edit-id').value = news.id;
-            document.getElementById('judul').value = news.judul;
-            document.getElementById('tanggal').value = news.tanggal;
-            document.getElementById('kategori').value = news.kategori;
-            document.getElementById('konten').value = news.konten;
-            document.getElementById('editor').value = news.editor; // POPULATE EDITOR
-            document.getElementById('gambar').value = news.gambar;
-            document.getElementById('form-title').innerText = "Edit Berita";
-            showTab('create');
-        }
-
-        function deleteNews(id) {
-            newsData = newsData.filter(n => n.id != id);
-            updateOutput();
-        }
-
-        function updateOutput() {
-            document.getElementById('jsonOutput').value = JSON.stringify(newsData, null, 2);
-            document.getElementById('resultArea').classList.remove('hidden');
+    // 1. Logic Load Data (Cek LocalStorage dulu, jika tidak ada baru ambil dari file JSON)
+    document.addEventListener("DOMContentLoaded", () => {
+        const localData = localStorage.getItem('newsDataCache');
+        if (localData) {
+            newsData = JSON.parse(localData);
             renderTable();
-            Swal.fire('Berhasil!', 'Data diperbarui, salin kode JSON di bawah.', 'success');
+        } else {
+            fetch('data/berita.json')
+                .then(r => r.json())
+                .then(data => {
+                    newsData = data;
+                    localStorage.setItem('newsDataCache', JSON.stringify(data)); // Simpan ke storage
+                    renderTable();
+                });
         }
+    });
 
-        function logout() { localStorage.removeItem('userRole'); window.location.href = 'https://mbs163.github.io/portal-app/login.html'; }
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
-    </script>
+    function showTab(tab) {
+        document.getElementById('section-create').classList.toggle('hidden', tab !== 'create');
+        document.getElementById('section-list').classList.toggle('hidden', tab !== 'list');
+        // ... (sisanya sama seperti kode lama Anda)
+    }
+
+    function renderTable() {
+        const tbody = document.getElementById('news-table-body');
+        tbody.innerHTML = newsData.map(n => `
+            <tr class="border-b">
+                <td class="p-3 font-medium">${n.judul}</td>
+                <td class="p-3 text-slate-500">${n.kategori}</td>
+                <td class="p-3 flex gap-2">
+                    <button onclick="editNews(${n.id})" class="text-blue-600 hover:underline">Edit</button>
+                    <button onclick="deleteNews(${n.id})" class="text-red-600 hover:underline">Hapus</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    document.getElementById('newsForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const id = document.getElementById('edit-id').value;
+        const newObj = {
+            id: id ? parseInt(id) : new Date().getTime(),
+            judul: document.getElementById('judul').value,
+            tanggal: document.getElementById('tanggal').value,
+            kategori: document.getElementById('kategori').value,
+            konten: document.getElementById('konten').value,
+            editor: document.getElementById('editor').value,
+            gambar: document.getElementById('gambar').value,
+            slug: document.getElementById('judul').value.toLowerCase().replace(/ /g,'-')
+        };
+
+        if (id) {
+            const index = newsData.findIndex(n => n.id == id);
+            newsData[index] = newObj;
+        } else {
+            newsData.unshift(newObj);
+        }
+        
+        // Simpan perubahan ke LocalStorage
+        localStorage.setItem('newsDataCache', JSON.stringify(newsData));
+        updateOutput();
+    });
+
+    function deleteNews(id) {
+        newsData = newsData.filter(n => n.id != id);
+        // Simpan perubahan ke LocalStorage
+        localStorage.setItem('newsDataCache', JSON.stringify(newsData));
+        updateOutput();
+    }
+
+    function updateOutput() {
+        document.getElementById('jsonOutput').value = JSON.stringify(newsData, null, 2);
+        document.getElementById('resultArea').classList.remove('hidden');
+        renderTable();
+        Swal.fire('Berhasil!', 'Data tersimpan di browser.', 'success');
+    }
+
+    function logout() { localStorage.removeItem('userRole'); window.location.href = 'https://mbs163.github.io/portal-app/login.html'; }
+    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
+</script>
 </body>
 </html>
