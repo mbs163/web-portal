@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Berita | MAS MANBA'USSALAM</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -20,17 +21,21 @@
 </head>
 <body class="bg-bgLight text-textDark font-sans antialiased">
 
-    <nav class="bg-white shadow-sm sticky top-0 z-50 h-20 flex items-center">
+    <!-- NAVIGASI -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50 h-20 flex items-center border-b border-slate-100">
         <div class="max-w-4xl mx-auto w-full px-4 flex justify-between items-center">
             <a href="index.html" class="flex items-center gap-2 text-primary font-bold text-sm hover:text-emerald-800 transition-colors">
-                <i class="fa-solid fa-arrow-left"></i> Kembali ke Beranda
+                <i class="fa-solid fa-arrow-left"></i> Beranda
             </a>
-            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Warta Madrasah</span>
+            <div id="breadcrumb" class="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                Warta Madrasah
+            </div>
         </div>
     </nav>
 
     <main class="max-w-4xl mx-auto px-4 py-12">
         <article class="bg-white rounded-3xl p-6 sm:p-10 shadow-xl border border-slate-100">
+            <!-- Loading State -->
             <div id="loading" class="text-center py-12 text-slate-400">
                 <i class="fa-solid fa-circle-notch fa-spin text-2xl mb-2 text-primary"></i>
                 <p class="text-sm">Membuka lembaran warta...</p>
@@ -49,54 +54,78 @@
                     <img id="art-gambar" src="" alt="Cover" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/800x450?text=MAS+Manbaussalam'">
                 </div>
 
-                <div id="art-konten" class="text-slate-700 leading-relaxed text-base space-y-4 whitespace-pre-line">
+                <div id="art-konten" class="text-slate-700 leading-relaxed text-base space-y-4 whitespace-pre-line"></div>
+
+                <!-- Footer Artikel (Editor & Share) -->
+                <div class="mt-12 pt-8 border-t border-slate-100">
+                    <div class="text-sm text-slate-500 italic mb-6">Editor: <span class="font-bold text-primary">Alif Mathuf</span></div>
+                    
+                    <div class="flex gap-3 mb-10 flex-wrap">
+                        <span class="text-xs font-bold text-slate-400 self-center uppercase tracking-widest mr-2">Share:</span>
+                        <button onclick="shareWhatsApp()" class="bg-emerald-500 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-emerald-600 transition-all"><i class="fa-brands fa-whatsapp mr-1"></i> WhatsApp</button>
+                        <button onclick="copyLink()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-xs font-bold hover:bg-slate-300 transition-all"><i class="fa-solid fa-link mr-1"></i> Salin Link</button>
                     </div>
+
+                    <!-- Rekomendasi Baca Juga -->
+                    <div id="rekomendasi-box" class="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                        <h4 class="font-bold text-primary mb-4 uppercase tracking-wider text-xs">Baca Juga Lainnya</h4>
+                        <ul id="list-rekomendasi" class="space-y-3"></ul>
+                    </div>
+                </div>
             </div>
         </article>
     </main>
 
-    <footer class="py-8 text-center text-xs text-slate-400 border-t border-slate-200 mt-12">
+    <footer class="py-8 text-center text-xs text-slate-400 border-t border-slate-200 mt-12 bg-white">
         © 2026 MAS Manba'ussalam &bull; Digital Ecosystem Integrated
     </footer>
 
     <script>
-        // Ambil parameter slug dari URL browser
         const urlParams = new URLSearchParams(window.location.search);
         const slug = urlParams.get('slug');
 
-        if (!slug) {
-            window.location.href = 'index.html';
-        }
+        if (!slug) window.location.href = 'index.html';
 
-        // Ambil data langsung dari JSON repositori lokal
         fetch('data/berita.json')
         .then(res => res.json())
         .then(beritaList => {
-            // Cari artikel yang slug-nya cocok
             const artikel = beritaList.find(item => item.slug === slug);
-
             if (!artikel) {
-                document.getElementById('loading').innerHTML = `
-                    <i class="fa-solid fa-file-circle-xmark text-red-400 text-3xl mb-2"></i>
-                    <p class="text-sm font-bold">Artikel tidak ditemukan atau telah diarsipkan.</p>`;
+                document.getElementById('loading').innerHTML = `<i class="fa-solid fa-file-circle-xmark text-red-400 text-3xl mb-2"></i><p class="text-sm font-bold">Artikel tidak ditemukan.</p>`;
                 return;
             }
 
-            // Tanam data ke elemen HTML
             document.getElementById('art-kategori').innerText = artikel.kategori;
+            document.getElementById('breadcrumb').innerText = `Warta > ${artikel.kategori}`;
             document.getElementById('art-judul').innerText = artikel.judul;
             document.getElementById('art-tanggal').innerText = artikel.tanggal;
             document.getElementById('art-gambar').src = artikel.gambar;
             document.getElementById('art-konten').innerText = artikel.konten;
 
-            // Munculkan area konten
+            // Render Baca Juga (Random 2 artikel selain artikel ini)
+            const rekomendasi = beritaList.filter(item => item.slug !== slug).sort(() => 0.5 - Math.random()).slice(0, 2);
+            const listRekom = document.getElementById('list-rekomendasi');
+            if(rekomendasi.length > 0) {
+                listRekom.innerHTML = rekomendasi.map(item => `
+                    <li><a href="detail-berita.html?slug=${item.slug}" class="text-primary hover:underline font-medium text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-newspaper text-slate-300"></i> ${item.judul}</a></li>
+                `).join('');
+            } else {
+                document.getElementById('rekomendasi-box').classList.add('hidden');
+            }
+
             document.getElementById('loading').classList.add('hidden');
             document.getElementById('content-area').classList.remove('hidden');
             document.title = `${artikel.judul} | MAS MANBA'USSALAM`;
-        })
-        .catch(err => {
-            document.getElementById('loading').innerHTML = `<p class="text-sm text-red-500 font-bold">Terjadi gangguan saat memuat halaman warta.</p>`;
         });
+
+        function shareWhatsApp() {
+            window.open(`https://wa.me/?text=Baca berita menarik ini di MAS Manba'ussalam: ${window.location.href}`, '_blank');
+        }
+        function copyLink() {
+            navigator.clipboard.writeText(window.location.href);
+            Swal.fire({ icon: 'success', title: 'Link disalin!', timer: 1500, showConfirmButton: false });
+        }
     </script>
 </body>
 </html>
