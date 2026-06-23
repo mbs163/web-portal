@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Tambah Berita - Admin MAS MANBA'USSALAM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Penjaga Pintu (Security Guard)
+        const role = localStorage.getItem('userRole');
+        if (!role || role !== 'admin') {
+            window.location.href = 'https://mbs163.github.io/portal-app/login.html';
+        }
+    </script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-sm">
+        <h2 class="text-2xl font-bold mb-6 text-primary">Posting Berita Baru</h2>
+        <form id="beritaForm" class="space-y-4">
+            <input type="text" id="judul" placeholder="Judul Berita" required class="w-full p-3 border rounded-lg">
+            <input type="date" id="tanggal" required class="w-full p-3 border rounded-lg">
+            <input type="text" id="kategori" placeholder="Kategori (Contoh: Prestasi)" required class="w-full p-3 border rounded-lg">
+            <textarea id="konten" placeholder="Isi Berita" required class="w-full p-3 border rounded-lg h-32"></textarea>
+            <input type="url" id="gambar" placeholder="Link Gambar (URL)" required class="w-full p-3 border rounded-lg">
+            <button type="submit" class="w-full bg-emerald-700 text-white p-3 rounded-lg font-bold">Simpan Berita</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('beritaForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                judul: document.getElementById('judul').value,
+                tanggal: document.getElementById('tanggal').value,
+                kategori: document.getElementById('kategori').value,
+                konten: document.getElementById('konten').value,
+                gambar: document.getElementById('gambar').value
+            };
+
+            const URL_GAS = "https://script.google.com/macros/s/AKfycbwVYZ2VVLscqxWevtOzg6pleeIovih0Y1xMVrTVKqaFTA-5uXq62XJHpQOSPybsCMrYjw/exec"; // GANTI DENGAN URL WEB APP ANDA
+
+            fetch(URL_GAS, {
+                method: "POST",
+                body: JSON.stringify(data)
+            }).then(() => {
+                alert("Berita berhasil diposting!");
+                window.location.reload();
+            });
+        });
+    </script>
+</body>
+</html>
