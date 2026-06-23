@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Berita | MAS MANBA'USSALAM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#0F766E', accent: '#D4AF37', bgLight: '#F9FAFB', textDark: '#111827' },
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-bgLight text-textDark font-sans antialiased">
+
+    <nav class="bg-white shadow-sm sticky top-0 z-50 h-20 flex items-center">
+        <div class="max-w-4xl mx-auto w-full px-4 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2 text-primary font-bold text-sm hover:text-emerald-800 transition-colors">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Beranda
+            </a>
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Warta Madrasah</span>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-4 py-12">
+        <article class="bg-white rounded-3xl p-6 sm:p-10 shadow-xl border border-slate-100">
+            <div id="loading" class="text-center py-12 text-slate-400">
+                <i class="fa-solid fa-circle-notch fa-spin text-2xl mb-2 text-primary"></i>
+                <p class="text-sm">Membuka lembaran warta...</p>
+            </div>
+
+            <div id="content-area" class="hidden">
+                <span id="art-kategori" class="inline-block bg-emerald-50 text-primary text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4"></span>
+                <h1 id="art-judul" class="text-2xl sm:text-4xl font-extrabold text-slate-900 leading-tight mb-4"></h1>
+                
+                <div class="flex items-center gap-4 text-xs text-slate-400 mb-8 pb-6 border-b border-slate-100">
+                    <span><i class="fa-regular fa-calendar mr-1"></i> <span id="art-tanggal"></span></span>
+                    <span><i class="fa-regular fa-user mr-1"></i> Humas MAS Manba'ussalam</span>
+                </div>
+
+                <div class="w-full aspect-[16/9] rounded-2xl overflow-hidden mb-8 shadow-md">
+                    <img id="art-gambar" src="" alt="Cover" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/800x450?text=MAS+Manbaussalam'">
+                </div>
+
+                <div id="art-konten" class="text-slate-700 leading-relaxed text-base space-y-4 whitespace-pre-line">
+                    </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="py-8 text-center text-xs text-slate-400 border-t border-slate-200 mt-12">
+        © 2026 MAS Manba'ussalam &bull; Digital Ecosystem Integrated
+    </footer>
+
+    <script>
+        // Ambil parameter slug dari URL browser
+        const urlParams = new URLSearchParams(window.location.search);
+        const slug = urlParams.get('slug');
+
+        if (!slug) {
+            window.location.href = 'index.html';
+        }
+
+        // Ambil data langsung dari JSON repositori lokal
+        fetch('data/berita.json')
+        .then(res => res.json())
+        .then(beritaList => {
+            // Cari artikel yang slug-nya cocok
+            const artikel = beritaList.find(item => item.slug === slug);
+
+            if (!artikel) {
+                document.getElementById('loading').innerHTML = `
+                    <i class="fa-solid fa-file-circle-xmark text-red-400 text-3xl mb-2"></i>
+                    <p class="text-sm font-bold">Artikel tidak ditemukan atau telah diarsipkan.</p>`;
+                return;
+            }
+
+            // Tanam data ke elemen HTML
+            document.getElementById('art-kategori').innerText = artikel.kategori;
+            document.getElementById('art-judul').innerText = artikel.judul;
+            document.getElementById('art-tanggal').innerText = artikel.tanggal;
+            document.getElementById('art-gambar').src = artikel.gambar;
+            document.getElementById('art-konten').innerText = artikel.konten;
+
+            // Munculkan area konten
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('content-area').classList.remove('hidden');
+            document.title = `${artikel.judul} | MAS MANBA'USSALAM`;
+        })
+        .catch(err => {
+            document.getElementById('loading').innerHTML = `<p class="text-sm text-red-500 font-bold">Terjadi gangguan saat memuat halaman warta.</p>`;
+        });
+    </script>
+</body>
+</html>
