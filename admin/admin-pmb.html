@@ -113,7 +113,7 @@
             const tbody = document.getElementById('tabelPendaftar');
             tbody.innerHTML = data.map((item, index) => `
                 <tr class="hover:bg-slate-50 transition-colors">
-                    <td class="p-4 whitespace-nowrap">${item.waktu}</td>
+                   <td class="p-4 whitespace-nowrap">${item.waktu.split(' ')[0]}</td>
                     <td class="p-4">${item.nisn}</td>
                     <td class="p-4 font-bold text-slate-800">${item.nama}</td>
                     <td class="p-4">${item.asal_sekolah}</td>
