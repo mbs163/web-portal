@@ -2,78 +2,223 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Manajemen Berita | Admin MBS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Berita | Admin MAS MANBA'USSALAM</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#0B1F3B', accent: '#D4AF37', bgLight: '#F8FAFC', textDark: '#0F172A' },
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <script>
+        // Penjaga Pintu Keamanan
+        const role = localStorage.getItem('userRole');
+        if (!role || role !== 'admin') {
+            window.location.href = 'https://mbs163.github.io/portal-app/login.html';
+        }
+    </script>
 </head>
-<body class="bg-gray-100 p-8">
-    <div class="max-w-5xl mx-auto">
-        <h2 class="text-2xl font-bold mb-6 text-primary">Manajemen Berita</h2>
+<body class="bg-bgLight text-textDark font-sans antialiased p-4 sm:p-8">
+    <div class="max-w-6xl mx-auto">
         
-        <!-- Form Tambah Berita -->
-        <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
-            <h3 class="font-bold mb-4">Tambah Berita Baru</h3>
-            <form id="beritaForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input type="text" id="judul" placeholder="Judul" required class="p-3 border rounded-lg">
-                <input type="date" id="tanggal" required class="p-3 border rounded-lg">
-                <input type="text" id="kategori" placeholder="Kategori" required class="p-3 border rounded-lg">
-                <input type="url" id="gambar" placeholder="Link Gambar" required class="p-3 border rounded-lg col-span-2">
-                <textarea id="konten" placeholder="Isi Berita" required class="p-3 border rounded-lg col-span-2 h-24"></textarea>
-                <button type="submit" class="bg-emerald-700 text-white p-3 rounded-lg font-bold col-span-2">Posting Berita</button>
-            </form>
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+            <div>
+                <h2 class="text-3xl font-extrabold text-primary tracking-tight">Pusat Manajemen Berita</h2>
+                <p class="text-sm text-slate-500 mt-1">Kelola publikasi informasi dan berita resmi MAS Manba'ussalam.</p>
+            </div>
+            <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold text-sm rounded-xl transition-all">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Dashboard
+            </a>
         </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-1">
+                <div class="bg-white p-6 rounded-2xl shadow-xl border border-slate-100 sticky top-28">
+                    <h3 class="font-bold text-lg text-primary mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-pen-to-square text-accent"></i> Tulis Berita Baru
+                    </h3>
+                    <form id="beritaForm" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Judul Berita</label>
+                            <input type="text" id="judul" required class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary outline-none transition-all" placeholder="Masukkan judul menarik...">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Tanggal</label>
+                                <input type="date" id="tanggal" required class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary outline-none transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Kategori</label>
+                                <input type="text" id="kategori" required class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary outline-none transition-all" placeholder="Prestasi, Kegiatan...">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Link Gambar (Bisa Google Drive)</label>
+                            <input type="url" id="gambar" required class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary outline-none transition-all text-xs" placeholder="https://drive.google.com/...">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Isi Konten</label>
+                            <textarea id="konten" required class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary outline-none transition-all h-32 resize-none" placeholder="Tulis narasi berita secara lengkap di sini..."></textarea>
+                        </div>
+                        <button type="submit" id="submitBtn" class="w-full bg-primary text-white p-4 rounded-xl font-bold hover:bg-slate-900 shadow-md shadow-primary/20 transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-paper-plane text-accent"></i> Terbitkan Berita
+                        </button>
+                    </form>
+                </div>
+            </div>
 
-        <!-- Tabel Daftar Berita -->
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-            <h3 class="font-bold mb-4">Daftar Berita Terkini</h3>
-            <div id="loading" class="text-center py-4">Memuat data...</div>
-            <table class="w-full text-left" id="tabelBerita">
-                <thead>
-                    <tr class="border-b">
-                        <th class="py-2">Judul</th>
-                        <th class="py-2">Tanggal</th>
-                        <th class="py-2">Kategori</th>
-                    </tr>
-                </thead>
-                <tbody id="listBerita"></tbody>
-            </table>
+            <div class="lg:col-span-2">
+                <div class="bg-white p-6 rounded-2xl shadow-xl border border-slate-100 min-h-[400px]">
+                    <h3 class="font-bold text-lg text-primary mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-newspaper text-accent"></i> Arsip Publikasi Anda
+                    </h3>
+                    
+                    <div id="loading" class="text-center py-12 flex flex-col items-center justify-center text-slate-400">
+                        <i class="fa-solid fa-circle-notch fa-spin text-3xl text-accent mb-2"></i>
+                        <p class="text-sm font-semibold tracking-wide animate-pulse">Menghubungkan ke server database...</p>
+                    </div>
+
+                    <div class="overflow-x-auto hidden" id="tableWrapper">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-100 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                                    <th class="pb-3 w-20">Cover</th>
+                                    <th class="pb-3">Info Berita</th>
+                                    <th class="pb-3 w-28">Kategori</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listBerita" class="text-sm divide-y divide-slate-100">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-    const URL_GAS = "https://script.google.com/macros/s/AKfycbwVYZ2VVLscqxWevtOzg6pleeIovih0Y1xMVrTVKqaFTA-5uXq62XJHpQOSPybsCMrYjw/exec"; // PASTE URL DI SINI
+        // Masukkan URL Deployment Google Apps Script Anda yang berakhiran /exec
+        const URL_GAS = "https://script.google.com/macros/s/AKfycbw_6Q-M6_pvGLUZH4IFtefxa3iwStdhyD7nii4lFIMAyYaILCfnbLOp6DnuWChG2HRmpw/exec"; 
 
-    document.getElementById('beritaForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = e.target.querySelector('button');
-        btn.innerText = "Mengirim...";
-        
-        const data = {
-            judul: document.getElementById('judul').value,
-            tanggal: document.getElementById('tanggal').value,
-            kategori: document.getElementById('kategori').value,
-            konten: document.getElementById('konten').value,
-            gambar: document.getElementById('gambar').value
-        };
-
-        try {
-            await fetch(URL_GAS, { method: "POST", body: JSON.stringify(data) });
-            alert("Berita Berhasil Ditambahkan!");
-            window.location.reload();
-        } catch (err) {
-            alert("Gagal kirim data: " + err);
+        // SANGAT PENTING: Fungsi Konversi Link Google Drive Biar Nggak Rusak
+        function fixDriveImageUrl(url) {
+            if (url.includes('drive.google.com')) {
+                let fileId = '';
+                if (url.includes('/file/d/')) {
+                    fileId = url.split('/file/d/')[1].split('/')[0];
+                } else if (url.includes('id=')) {
+                    fileId = url.split('id=')[1].split('&')[0];
+                }
+                if (fileId) {
+                    return `https://drive.google.com/uc?export=view&id=${fileId}`;
+                }
+            }
+            return url;
         }
-    });
 
-    // Load Data
-    fetch(URL_GAS)
-    .then(res => res.json())
-    .then(data => {
-        const tbody = document.getElementById('listBerita');
-        tbody.innerHTML = ''; // Bersihkan loading
-        data.reverse().forEach(b => {
-            tbody.innerHTML += `<tr><td class="p-3 border-b">${b.judul}</td><td class="p-3 border-b">${b.tanggal}</td><td class="p-3 border-b">${b.kategori}</td></tr>`;
+        // Fungsi Load & Tampilkan Data Ke Tabel
+        function loadBerita() {
+            fetch(URL_GAS)
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('tableWrapper').classList.remove('hidden');
+                
+                const tbody = document.getElementById('listBerita');
+                tbody.innerHTML = ''; 
+                
+                if(data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="3" class="p-8 text-center text-slate-400 font-medium">Belum ada rekaman berita di database.</td></tr>`;
+                    return;
+                }
+
+                data.reverse().forEach(b => {
+                    // Konversi URL gambar saat rendering agar aman tampil di admin
+                    const secureImg = fixDriveImageUrl(b.gambar);
+                    tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50/80 transition-colors">
+                        <td class="py-4 pr-3">
+                            <div class="w-16 h-12 bg-slate-100 rounded-lg overflow-hidden border border-slate-200">
+                                <img src="${secureImg}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/150?text=MBS'">
+                            </div>
+                        </td>
+                        <td class="py-4 pr-3">
+                            <div class="font-bold text-slate-800 line-clamp-1">${b.judul}</div>
+                            <div class="text-xs text-slate-400 mt-0.5"><i class="fa-regular fa-calendar mr-1"></i> ${b.tanggal}</div>
+                        </td>
+                        <td class="py-4">
+                            <span class="inline-block bg-emerald-50 text-emerald-700 text-xs px-2.5 py-1 rounded-full font-bold">${b.kategori}</span>
+                        </td>
+                    </tr>`;
+                });
+            }).catch(err => {
+                document.getElementById('loading').innerHTML = `<i class="fa-solid fa-triangle-exclamation text-red-500 text-2xl mb-2"></i><p class="text-xs text-red-500 font-bold">Gagal mengambil data dari Google Sheet.</p>`;
+            });
+        }
+
+        // Fungsi Aksi Kirim Form (Submit)
+        document.getElementById('beritaForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Mengunci form agar tidak terjadi pemuatan ulang (404) bawaan github
+            
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin text-accent"></i> Memproses Data...`;
+
+            // Konversi link gambar google drive admin sebelum dikirim ke database spreadsheet
+            const rawUrl = document.getElementById('gambar').value;
+            const convertedUrl = fixDriveImageUrl(rawUrl);
+
+            const payload = {
+                judul: document.getElementById('judul').value,
+                tanggal: document.getElementById('tanggal').value,
+                kategori: document.getElementById('kategori').value,
+                konten: document.getElementById('konten').value,
+                gambar: convertedUrl // Simpan versi link bersih direct link
+            };
+
+            try {
+                const response = await fetch(URL_GAS, {
+                    method: "POST",
+                    body: JSON.stringify(payload)
+                });
+                
+                // Tampilkan SweetAlert Premium Sukses ala Navy Gold
+                Swal.fire({
+                    title: 'Berita Diterbitkan!',
+                    text: 'Berita Anda telah berhasil tersimpan aman di sistem pusat.',
+                    icon: 'success',
+                    iconColor: '#D4AF37',
+                    confirmButtonColor: '#0B1F3B',
+                    confirmButtonText: 'Selesai'
+                }).then(() => {
+                    document.getElementById('beritaForm').reset();
+                    btn.disabled = false;
+                    btn.innerHTML = `<i class="fa-solid fa-paper-plane text-accent"></i> Terbitkan Berita`;
+                    loadBerita(); // Segarkan isi tabel secara realtime
+                });
+
+            } catch (error) {
+                Swal.fire({
+                    title: 'Gagal Menyimpan!',
+                    text: 'Koneksi terputus. Pastikan Apps Script Anda diatur ke konfigurasi publik.',
+                    icon: 'error',
+                    confirmButtonColor: '#0B1F3B'
+                });
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-paper-plane text-accent"></i> Terbitkan Berita`;
+            }
         });
-    });
-</script>
+
+        // Panggil fungsi pemuatan data saat halaman pertama kali dibuka
+        window.onload = loadBerita;
+    </script>
 </body>
 </html>
