@@ -49,15 +49,14 @@
                 <input type="text" id="judul" required class="w-full p-3 border rounded-xl" placeholder="Judul Berita">
                 <div class="grid grid-cols-2 gap-4">
                     <input type="text" id="tanggal" required class="w-full p-3 border rounded-xl" placeholder="Tanggal (Contoh: 15 Okt 2026)">
-                   <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Kategori</label>
-<select id="kategori" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary outline-none transition-all bg-white">
-    <option value="Akademik">Akademik</option>
-    <option value="Kesiswaan">Kesiswaan</option>
-    <option value="Kepegawaian">Kepegawaian</option>
-    <option value="Informasi Publik">Informasi Publik</option>
-</select>
+                    <select id="kategori" class="w-full p-3 border rounded-xl">
+                        <option>Prestasi</option><option>Akademik</option><option>Kesiswaan</option><option>Kepegawaian</option><option>Informasi Publik</option>
+                    </select>
                 </div>
                 <input type="text" id="gambar" required class="w-full p-3 border rounded-xl" placeholder="URL Gambar (assets/images/foto.jpg)">
+                <!-- INPUT EDITOR TAMBAHAN -->
+                <input type="text" id="editor" required class="w-full p-3 border rounded-xl" placeholder="Nama Editor">
+                
                 <textarea id="konten" required class="w-full p-3 border rounded-xl h-32" placeholder="Isi berita..."></textarea>
                 <button type="submit" class="w-full bg-primary text-white p-4 rounded-xl font-bold hover:bg-slate-900">Simpan Perubahan</button>
             </form>
@@ -118,6 +117,7 @@
                 tanggal: document.getElementById('tanggal').value,
                 kategori: document.getElementById('kategori').value,
                 konten: document.getElementById('konten').value,
+                editor: document.getElementById('editor').value, // DATA EDITOR BARU
                 gambar: document.getElementById('gambar').value,
                 slug: document.getElementById('judul').value.toLowerCase().replace(/ /g,'-')
             };
@@ -138,6 +138,7 @@
             document.getElementById('tanggal').value = news.tanggal;
             document.getElementById('kategori').value = news.kategori;
             document.getElementById('konten').value = news.konten;
+            document.getElementById('editor').value = news.editor; // POPULATE EDITOR
             document.getElementById('gambar').value = news.gambar;
             document.getElementById('form-title').innerText = "Edit Berita";
             showTab('create');
