@@ -386,5 +386,12 @@
 <script>
   AOS.init({ duration: 800, once: true });
 </script>
+    <script>
+    // Script ini otomatis mencari semua gambar yang belum ada 'loading' attribute
+    // lalu menambahkannya secara global.
+    document.querySelectorAll('img:not([loading])').forEach(img => {
+        img.setAttribute('loading', 'lazy');
+    });
+</script>
 </body>
 </html>
