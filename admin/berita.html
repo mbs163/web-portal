@@ -40,31 +40,40 @@
     </div>
 
     <script>
-        const URL_GAS = "https://script.google.com/macros/s/AKfycbwVYZ2VVLscqxWevtOzg6pleeIovih0Y1xMVrTVKqaFTA-5uXq62XJHpQOSPybsCMrYjw/exec"; 
+    const URL_GAS = "https://script.google.com/macros/s/AKfycbwVYZ2VVLscqxWevtOzg6pleeIovih0Y1xMVrTVKqaFTA-5uXq62XJHpQOSPybsCMrYjw/exec"; // PASTE URL DI SINI
 
-        // Fungsi Tambah
-        document.getElementById('beritaForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const data = {
-                judul: document.getElementById('judul').value,
-                tanggal: document.getElementById('tanggal').value,
-                kategori: document.getElementById('kategori').value,
-                konten: document.getElementById('konten').value,
-                gambar: document.getElementById('gambar').value
-            };
+    document.getElementById('beritaForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button');
+        btn.innerText = "Mengirim...";
+        
+        const data = {
+            judul: document.getElementById('judul').value,
+            tanggal: document.getElementById('tanggal').value,
+            kategori: document.getElementById('kategori').value,
+            konten: document.getElementById('konten').value,
+            gambar: document.getElementById('gambar').value
+        };
+
+        try {
             await fetch(URL_GAS, { method: "POST", body: JSON.stringify(data) });
             alert("Berita Berhasil Ditambahkan!");
             window.location.reload();
-        });
+        } catch (err) {
+            alert("Gagal kirim data: " + err);
+        }
+    });
 
-        // Fungsi Load Data
-        fetch(URL_GAS).then(res => res.json()).then(data => {
-            document.getElementById('loading').classList.add('hidden');
-            const tbody = document.getElementById('listBerita');
-            data.forEach(b => {
-                tbody.innerHTML += `<tr class="border-b"><td class="py-3">${b.judul}</td><td class="py-3">${b.tanggal}</td><td class="py-3">${b.kategori}</td></tr>`;
-            });
+    // Load Data
+    fetch(URL_GAS)
+    .then(res => res.json())
+    .then(data => {
+        const tbody = document.getElementById('listBerita');
+        tbody.innerHTML = ''; // Bersihkan loading
+        data.reverse().forEach(b => {
+            tbody.innerHTML += `<tr><td class="p-3 border-b">${b.judul}</td><td class="p-3 border-b">${b.tanggal}</td><td class="p-3 border-b">${b.kategori}</td></tr>`;
         });
-    </script>
+    });
+</script>
 </body>
 </html>
