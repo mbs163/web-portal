@@ -34,14 +34,19 @@
                 </div>
                 
                 <div class="hidden md:flex items-center gap-8 font-semibold text-sm">
-                    <a href="#profil" class="text-gray-600 hover:text-primary transition-colors">Profil</a>
-                    <a href="#berita" class="text-gray-600 hover:text-primary transition-colors">Berita</a>
-                    <a href="#galeri" class="text-gray-600 hover:text-primary transition-colors">Galeri</a>
-                    <a href="#kontak" class="text-gray-600 hover:text-primary transition-colors">Kontak</a>
-                    <a href="#" id="btn-nav-portal" class="bg-primary text-white px-5 py-2.5 rounded-xl hover:bg-emerald-800 transition-all shadow-md shadow-primary/10 flex items-center gap-2">
-                        <i class="fa-solid fa-right-to-bracket text-accent"></i> Masuk Aplikasi
-                    </a>
-                </div>
+    <a href="#profil" class="text-gray-600 hover:text-primary transition-colors">Profil</a>
+    <a href="#berita" class="text-gray-600 hover:text-primary transition-colors">Berita</a>
+    <a href="#galeri" class="text-gray-600 hover:text-primary transition-colors">Galeri</a>
+    <a href="#kontak" class="text-gray-600 hover:text-primary transition-colors">Kontak</a>
+    
+    <a href="#" id="btn-nav-portal" class="bg-primary text-white px-5 py-2.5 rounded-xl hover:bg-emerald-800 transition-all shadow-md shadow-primary/10 flex items-center gap-2">
+        <i class="fa-solid fa-right-to-bracket text-accent"></i> Masuk Aplikasi
+    </a>
+
+    <a href="admin/index.html" id="btn-nav-admin" class="hidden bg-accent text-primary px-5 py-2.5 rounded-xl hover:bg-yellow-400 transition-all shadow-md shadow-accent/20 flex items-center gap-2">
+        <i class="fa-solid fa-gauge text-primary"></i> Dashboard Admin
+    </a>
+</div>
 
                 <div class="md:hidden flex items-center">
                     <button id="mobile-menu-btn" class="text-gray-600 hover:text-primary text-2xl focus:outline-none transition-colors">
@@ -126,39 +131,9 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <article class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all group">
-                    <div class="h-48 bg-gray-200 overflow-hidden relative">
-                        <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=600&q=80" alt="News 1" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500">
-                    </div>
-                    <div class="p-6">
-                        <time class="text-xs text-gray-400 block mb-2 font-medium"><i class="fa-regular fa-calendar mr-1"></i> 24 Okt 2026</time>
-                        <h3 class="font-bold text-lg mb-2 text-textDark group-hover:text-primary transition-colors leading-tight">Santri MAS Manba'ussalam Raih Medali Emas Olimpiade Sains Nasional</h3>
-                        <p class="text-gray-500 text-sm mb-4 line-clamp-2">Pencapaian luar biasa ditunjukkan oleh tim riset madrasah dalam ajang bergengsi tingkat nasional tahun ini.</p>
-                        <a href="#" class="text-accent font-bold text-xs hover:text-primary transition-colors">BACA SELENGKAPNYA</a>
-                    </div>
-                </article>
-                <article class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all group">
-                    <div class="h-48 bg-gray-200 overflow-hidden relative">
-                        <img src="https://images.unsplash.com/photo-1510519138101-570d1dca3d66?auto=format&fit=crop&w=600&q=80" alt="News 2" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500">
-                    </div>
-                    <div class="p-6">
-                        <time class="text-xs text-gray-400 block mb-2 font-medium"><i class="fa-regular fa-calendar mr-1"></i> 12 Okt 2026</time>
-                        <h3 class="font-bold text-lg mb-2 text-textDark group-hover:text-primary transition-colors leading-tight">Peringatan Maulid Nabi Muhammad SAW Berlangsung Khidmat</h3>
-                        <p class="text-gray-500 text-sm mb-4 line-clamp-2">Acara diisi dengan tabligh akbar dan penampilan hadroh dari ekstrakurikuler seni Islami madrasah.</p>
-                        <a href="#" class="text-accent font-bold text-xs hover:text-primary transition-colors">BACA SELENGKAPNYA</a>
-                    </div>
-                </article>
-                <article class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all group hidden md:block">
-                    <div class="h-48 bg-gray-200 overflow-hidden relative">
-                        <img src="https://images.unsplash.com/photo-1546410531-ea4cea477149?auto=format&fit=crop&w=600&q=80" alt="News 3" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500">
-                    </div>
-                    <div class="p-6">
-                        <time class="text-xs text-gray-400 block mb-2 font-medium"><i class="fa-regular fa-calendar mr-1"></i> 05 Okt 2026</time>
-                        <h3 class="font-bold text-lg mb-2 text-textDark group-hover:text-primary transition-colors leading-tight">Ujian Tengah Semester Menggunakan CBT (Computer Based Test)</h3>
-                        <p class="text-gray-500 text-sm mb-4 line-clamp-2">Pelaksanaan evaluasi pembelajaran menggunakan server internal berjalan dengan lancar dan transparan.</p>
-                        <a href="#" class="text-accent font-bold text-xs hover:text-primary transition-colors">BACA SELENGKAPNYA</a>
-                    </div>
-                </article>
+               <div id="berita-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <!-- Berita akan muncul di sini secara otomatis -->
+</div>
             </div>
         </div>
     </section>
@@ -245,5 +220,32 @@
         const mobileMenu = document.getElementById('mobile-menu');
         mobileBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
     </script>
+    <script>
+    fetch('https://script.google.com/macros/s/AKfycbwVYZ2VVLscqxWevtOzg6pleeIovih0Y1xMVrTVKqaFTA-5uXq62XJHpQOSPybsCMrYjw/exec') // GANTI DENGAN URL WEB APP ANDA
+    .then(response => response.json())
+    .then(data => {
+        const container = document.getElementById('berita-container');
+        data.slice(-3).reverse().forEach(b => { // Ambil 3 berita terbaru
+            container.innerHTML += `
+                <article class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all">
+                    <img src="${b.gambar}" class="h-48 w-full object-cover">
+                    <div class="p-6">
+                        <span class="text-xs text-emerald-600 font-bold">${b.kategori}</span>
+                        <h3 class="font-bold text-lg mt-2">${b.judul}</h3>
+                        <p class="text-sm text-gray-500 mt-2 line-clamp-2">${b.konten}</p>
+                    </div>
+                </article>`;
+        });
+    });
+</script>
+    <script>
+    // Cek apakah sudah login sebagai admin
+    const role = localStorage.getItem('userRole');
+    
+    if (role === 'admin') {
+        document.getElementById('btn-nav-portal').classList.add('hidden'); // Sembunyikan "Masuk"
+        document.getElementById('btn-nav-admin').classList.remove('hidden'); // Tampilkan "Dashboard"
+    }
+</script>
 </body>
 </html>
