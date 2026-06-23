@@ -49,9 +49,13 @@
                 <input type="text" id="judul" required class="w-full p-3 border rounded-xl" placeholder="Judul Berita">
                 <div class="grid grid-cols-2 gap-4">
                     <input type="text" id="tanggal" required class="w-full p-3 border rounded-xl" placeholder="Tanggal (Contoh: 15 Okt 2026)">
-                    <select id="kategori" class="w-full p-3 border rounded-xl">
-                        <option>Prestasi</option><option>Akademik</option><option>Kegiatan</option><option>Pengumuman</option>
-                    </select>
+                   <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Kategori</label>
+<select id="kategori" class="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary outline-none transition-all bg-white">
+    <option value="Akademik">Akademik</option>
+    <option value="Kesiswaan">Kesiswaan</option>
+    <option value="Kepegawaian">Kepegawaian</option>
+    <option value="Informasi Publik">Informasi Publik</option>
+</select>
                 </div>
                 <input type="text" id="gambar" required class="w-full p-3 border rounded-xl" placeholder="URL Gambar (assets/images/foto.jpg)">
                 <textarea id="konten" required class="w-full p-3 border rounded-xl h-32" placeholder="Isi berita..."></textarea>
