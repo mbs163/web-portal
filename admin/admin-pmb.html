@@ -10,12 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
-            theme: {
-                extend: {
-                    colors: { primary: '#0B1F3B', accent: '#D4AF37', bgLight: '#F8FAFC', textDark: '#0F172A' },
-                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] }
-                }
-            }
+            theme: { extend: { colors: { primary: '#0B1F3B', accent: '#D4AF37', bgLight: '#F8FAFC', textDark: '#0F172A' }, fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] } } }
         }
         if (localStorage.getItem('userRole') !== 'admin') {
             window.location.href = 'https://mbs163.github.io/portal-app/login.html';
@@ -24,8 +19,10 @@
 </head>
 <body class="bg-bgLight text-textDark font-sans antialiased flex h-screen overflow-hidden">
 
+    <!-- OVERLAY UNTUK MOBILE -->
     <div id="mobile-overlay" class="fixed inset-0 bg-slate-900/60 z-30 hidden md:hidden transition-opacity" onclick="toggleSidebar()"></div>
 
+    <!-- SIDEBAR NAVIGASI -->
     <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-primary text-white flex flex-col h-full overflow-y-auto shadow-2xl transform -translate-x-full md:translate-x-0 md:relative transition-transform duration-300 ease-in-out">
         <div class="p-6 flex items-center justify-between border-b border-white/10 sticky top-0 bg-primary z-10">
             <div class="flex items-center gap-3">
@@ -42,22 +39,28 @@
             <div>
                 <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 px-2">Kelola Konten</h3>
                 <ul class="space-y-1">
-                    <li><a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-white/10"><i class="fa-solid fa-house w-5"></i> Dashboard Utama</a></li>
-                    <li><a href="berita.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-white/10"><i class="fa-solid fa-newspaper w-5"></i> Berita</a></li>
-                    <li><a href="admin-galeri.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-white/10"><i class="fa-solid fa-images w-5"></i> Galeri Foto</a></li>
+                    <li><a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-white/10"><i class="fa-solid fa-house w-5 text-center"></i> Dashboard Utama</a></li>
+                    <li><a href="berita.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-white/10"><i class="fa-solid fa-newspaper w-5 text-center"></i> Berita</a></li>
+                    <li><a href="admin-galeri.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-white/10"><i class="fa-solid fa-images w-5 text-center"></i> Galeri Foto</a></li>
                 </ul>
             </div>
             <div>
                 <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 px-2">Sistem Aplikasi</h3>
-                <ul>
-                    <li><a href="admin-pmb.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-accent bg-white/10 font-bold"><i class="fa-solid fa-user-graduate w-5"></i> Data PMB</a></li>
+                <ul class="space-y-1">
+                    <li><a href="admin-pmb.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-accent bg-white/10 font-bold shadow-inner border border-white/5"><i class="fa-solid fa-user-graduate w-5 text-center"></i> Data PMB</a></li>
+                    <li><a href="admin-simpeg.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-white/10"><i class="fa-solid fa-id-card w-5 text-center"></i> SIMPEG</a></li>
                 </ul>
             </div>
         </div>
-        <div class="p-4 border-t border-white/10"><button onclick="logout()" class="w-full text-red-400 text-sm font-bold"><i class="fa-solid fa-power-off"></i> Keluar Sistem</button></div>
+        <div class="p-4 border-t border-white/10">
+            <button onclick="logout()" class="w-full flex items-center justify-center gap-2 py-2.5 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white rounded-lg text-sm font-bold transition-all">
+                <i class="fa-solid fa-power-off"></i> Keluar Sistem
+            </button>
+        </div>
     </aside>
 
-    <main class="flex-1 flex flex-col h-full overflow-y-auto bg-slate-50">
+    <!-- AREA KONTEN UTAMA -->
+    <main class="flex-1 flex flex-col h-full overflow-y-auto bg-slate-50 relative">
         <header class="bg-white shadow-sm border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
             <h1 class="text-xl font-bold text-primary">Sistem Penerimaan</h1>
             <span class="text-sm font-medium text-slate-500" id="admin-name">Admin</span>
@@ -68,23 +71,30 @@
                 <div>
                     <h2 class="text-3xl font-extrabold text-primary">Database Calon Siswa</h2>
                 </div>
-                <div class="flex bg-white rounded-lg p-1 shadow-sm border border-slate-200">
-                    <button onclick="filterData('Semua')" class="px-4 py-2 text-xs font-bold rounded-md bg-slate-100 hover:bg-slate-200">Semua</button>
-                    <button onclick="filterData('Menunggu')" class="px-4 py-2 text-xs font-bold rounded-md hover:bg-slate-100">Menunggu</button>
-                    <button onclick="filterData('Diterima')" class="px-4 py-2 text-xs font-bold rounded-md hover:bg-slate-100">Diterima</button>
-                    <button onclick="filterData('Ditolak')" class="px-4 py-2 text-xs font-bold rounded-md hover:bg-slate-100">Ditolak</button>
+                <div class="flex gap-2">
+                    <div class="flex bg-white rounded-lg p-1 shadow-sm border border-slate-200">
+                        <button onclick="filterData('Semua')" class="px-4 py-2 text-xs font-bold rounded-md bg-slate-100">Semua</button>
+                        <button onclick="filterData('Menunggu')" class="px-4 py-2 text-xs font-bold rounded-md hover:bg-slate-100">Menunggu/Proses</button>
+                        <button onclick="filterData('Diterima')" class="px-4 py-2 text-xs font-bold rounded-md hover:bg-slate-100">Diterima</button>
+                        <button onclick="filterData('Ditolak')" class="px-4 py-2 text-xs font-bold rounded-md hover:bg-slate-100">Ditolak</button>
+                    </div>
+                    <button onclick="exportToExcel()" class="px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 shadow-sm transition-all">
+                        <i class="fa-solid fa-file-excel mr-1"></i> Export
+                    </button>
                 </div>
             </div>
 
             <div class="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
-                <table class="w-full text-left">
-                    <thead class="bg-slate-50 border-b text-slate-500 text-xs font-bold uppercase">
-                        <tr><th class="p-4">Tanggal</th><th class="p-4">NISN</th><th class="p-4">Nama</th><th class="p-4">Status</th><th class="p-4 text-center">Aksi</th></tr>
-                    </thead>
-                    <tbody id="tabelPendaftar" class="text-sm divide-y">
-                        <tr><td colspan="5" class="p-12 text-center text-slate-400"><i class="fa-solid fa-circle-notch fa-spin text-3xl mb-3 text-emerald-500"></i><p>Memuat data...</p></td></tr>
-                    </tbody>
-                </table>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-50 border-b text-slate-500 uppercase font-bold">
+                            <tr><th class="p-4">Waktu</th><th class="p-4">NISN</th><th class="p-4">Nama</th><th class="p-4">TTL</th><th class="p-4">Asal Sekolah</th><th class="p-4">HP/WA</th><th class="p-4">Status</th><th class="p-4 text-center">Aksi</th></tr>
+                        </thead>
+                        <tbody id="tabelPendaftar" class="text-sm divide-y text-slate-700">
+                            <tr><td colspan="8" class="p-12 text-center text-slate-400"><i class="fa-solid fa-circle-notch fa-spin text-3xl mb-3 text-emerald-500"></i><p>Memuat data dari server...</p></td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </main>
@@ -92,21 +102,40 @@
     <script>
         const URL_GAS = "https://script.google.com/macros/s/AKfycbw_6Q-M6_pvGLUZH4IFtefxa3iwStdhyD7nii4lFIMAyYaILCfnbLOp6DnuWChG2HRmpw/exec";
         let pmbData = [];
+        let filteredData = [];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById('admin-name').innerText = localStorage.getItem('userName') || 'Admin';
+            loadData();
+        });
 
         async function loadData() {
-            const res = await fetch(URL_GAS + "?action=getPMB");
-            const json = await res.json();
-            pmbData = json.data;
-            renderTable(pmbData);
+            const tbody = document.getElementById('tabelPendaftar');
+            try {
+                const response = await fetch(URL_GAS + "?action=getPMB");
+                const jsonResponse = await response.json();
+                pmbData = jsonResponse.data;
+                filteredData = pmbData;
+                renderTable(filteredData);
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="8" class="p-4 text-center text-red-500">Gagal memuat data. Periksa Google Apps Script.</td></tr>`;
+            }
         }
 
         function renderTable(data) {
             const tbody = document.getElementById('tabelPendaftar');
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="p-12 text-center text-slate-400">Tidak ada data ditemukan.</td></tr>`;
+                return;
+            }
             tbody.innerHTML = data.map((item, index) => `
-                <tr class="hover:bg-slate-50">
-                    <td class="p-4">${item.waktu}</td>
-                    <td class="p-4">${item.nisn}</td>
-                    <td class="p-4 font-bold">${item.nama}</td>
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="p-4 whitespace-nowrap">${item.waktu}</td>
+                    <td class="p-4 font-medium">${item.nisn}</td>
+                    <td class="p-4 font-bold text-primary">${item.nama}</td>
+                    <td class="p-4 whitespace-nowrap">${item.tempat_lahir}, ${item.tanggal_lahir}</td>
+                    <td class="p-4">${item.asal_sekolah}</td>
+                    <td class="p-4">${item.no_hp}</td>
                     <td class="p-4"><span class="px-2 py-1 rounded text-xs font-bold ${getStatusStyle(item.status)}">${item.status || 'Menunggu'}</span></td>
                     <td class="p-4 text-center"><button onclick="openDetail(${index})" class="text-primary font-bold hover:underline">DETAIL</button></td>
                 </tr>
@@ -120,43 +149,49 @@
         }
 
         function filterData(status) {
-            const filtered = status === 'Semua' ? pmbData : pmbData.filter(i => (i.status || 'Menunggu') === status);
-            renderTable(filtered);
+            filteredData = (status === 'Semua') ? pmbData : pmbData.filter(i => (i.status || 'Menunggu') === status);
+            renderTable(filteredData);
         }
 
         async function openDetail(index) {
-            const item = pmbData[index];
+            const item = filteredData[index];
             const { value: status } = await Swal.fire({
-                title: 'Data Pendaftar',
-                html: `<b>${item.nama}</b><br>NISN: ${item.nisn}<br>Asal: ${item.asal_sekolah}<br><br>
-                       <select id="swal-status" class="w-full p-2 border rounded"><option value="Menunggu" ${item.status==='Menunggu'?'selected':''}>Menunggu</option><option value="Diterima" ${item.status==='Diterima'?'selected':''}>Diterima</option><option value="Ditolak" ${item.status==='Ditolak'?'selected':''}>Ditolak</option></select>`,
-                confirmButtonText: 'Simpan Status',
+                title: 'Detail Pendaftar',
+                html: `<div class="text-left text-sm space-y-2"><p><b>Nama:</b> ${item.nama}</p><p><b>NISN:</b> ${item.nisn}</p><p><b>Asal:</b> ${item.asal_sekolah}</p>
+                       <label class="block mt-4 font-bold">Ubah Status:</label>
+                       <select id="swal-status" class="w-full p-2 border rounded">
+                           <option value="Menunggu" ${item.status==='Menunggu'?'selected':''}>Menunggu/Proses</option>
+                           <option value="Diterima" ${item.status==='Diterima'?'selected':''}>Diterima</option>
+                           <option value="Ditolak" ${item.status==='Ditolak'?'selected':''}>Ditolak</option>
+                       </select></div>`,
+                confirmButtonText: 'Simpan',
                 preConfirm: () => document.getElementById('swal-status').value
             });
 
             if (status) {
-                // KIRIM KE GOOGLE SHEET
-                const res = await fetch(URL_GAS, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'updateStatus', nisn: item.nisn, status: status })
-                });
+                const res = await fetch(URL_GAS, { method: 'POST', body: JSON.stringify({ action: 'updateStatus', nisn: item.nisn, status: status }) });
                 const result = await res.json();
-                
                 if(result.status === 'success') {
-                    pmbData[index].status = status;
-                    renderTable(pmbData);
-                    Swal.fire('Berhasil!', 'Status telah diperbarui di Database.', 'success');
+                    item.status = status;
+                    renderTable(filteredData);
+                    Swal.fire('Berhasil!', 'Status telah diperbarui.', 'success');
                 }
             }
         }
 
+        function exportToExcel() {
+            let csv = "Timestamp,NISN,Nama,Tempat Lahir,Tanggal Lahir,Asal Sekolah,HP/WA,Status\n";
+            filteredData.forEach(i => csv += `${i.waktu},${i.nisn},${i.nama},${i.tempat_lahir},${i.tanggal_lahir},${i.asal_sekolah},${i.no_hp},${i.status || 'Menunggu'}\n`);
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Data_PMB_${new Date().toLocaleDateString()}.csv`;
+            a.click();
+        }
+
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); document.getElementById('mobile-overlay').classList.toggle('hidden'); }
         function logout() { localStorage.removeItem('userRole'); window.location.href = 'https://mbs163.github.io/portal-app/login.html'; }
-        
-        document.addEventListener("DOMContentLoaded", () => {
-            document.getElementById('admin-name').innerText = localStorage.getItem('userName') || 'Admin';
-            loadData();
-        });
     </script>
 </body>
 </html>
