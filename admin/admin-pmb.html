@@ -19,10 +19,8 @@
 </head>
 <body class="bg-bgLight text-textDark font-sans antialiased flex h-screen overflow-hidden">
 
-    <!-- OVERLAY UNTUK MOBILE -->
     <div id="mobile-overlay" class="fixed inset-0 bg-slate-900/60 z-30 hidden md:hidden transition-opacity" onclick="toggleSidebar()"></div>
 
-    <!-- SIDEBAR MASTER -->
     <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-primary text-white flex flex-col h-full overflow-y-auto shadow-2xl transform -translate-x-full md:translate-x-0 md:relative transition-transform duration-300 ease-in-out">
         <div class="p-6 flex items-center justify-between border-b border-white/10 sticky top-0 bg-primary z-10">
             <div class="flex items-center gap-3">
@@ -119,7 +117,12 @@
                     <td class="p-4">${item.asal_sekolah}</td>
                     <td class="p-4">${item.no_hp}</td>
                     <td class="p-4"><span class="px-2 py-1 rounded font-bold ${getStatusStyle(item.status)}">${item.status || 'Menunggu'}</span></td>
-                    <td class="p-4 text-center"><button onclick="openDetail(${index})" class="text-primary font-bold hover:underline">DETAIL</button></td>
+                    <td class="p-4 flex items-center justify-center gap-2">
+                        <button onclick="openDetail(${index})" class="text-primary font-bold hover:underline">DETAIL</button>
+                        <button onclick="kirimWASiswa(${index})" class="bg-emerald-500 hover:bg-emerald-600 text-white px-2 py-1 rounded shadow-sm text-xs flex items-center gap-1 transition-colors" title="Kirim Pesan WA">
+                            <i class="fa-brands fa-whatsapp text-sm"></i> WA
+                        </button>
+                    </td>
                 </tr>
             `).join('');
         }
@@ -163,9 +166,59 @@
                 if(result.status === 'success') {
                     item.status = status;
                     renderTable(filteredData);
-                    Swal.fire({ icon: 'success', title: 'Berhasil', text: 'Status diperbarui!', timer: 1500, showConfirmButton: false });
+                    
+                    // Menawarkan Admin untuk langsung mengirim WA setelah mengubah status
+                    Swal.fire({ 
+                        icon: 'success', 
+                        title: 'Status Diperbarui!', 
+                        text: 'Apakah Anda ingin langsung memberitahu siswa via WhatsApp?', 
+                        showCancelButton: true,
+                        confirmButtonText: 'Ya, Kirim WA',
+                        cancelButtonText: 'Nanti Saja',
+                        confirmButtonColor: '#10B981', // warna emerald
+                        cancelButtonColor: '#64748B'  // warna abu-abu
+                    }).then((resultAction) => {
+                        if (resultAction.isConfirmed) {
+                            kirimWASiswa(index);
+                        }
+                    });
                 }
             }
+        }
+
+        // FUNGSI BARU: MENGIRIM WA KE SISWA
+        function kirimWASiswa(index) {
+            const item = filteredData[index];
+            const nama = item.nama;
+            const no_hp = item.no_hp;
+            const status = item.status || 'Menunggu';
+
+            if (!no_hp) {
+                Swal.fire('Gagal', 'Siswa ini tidak mencantumkan nomor HP/WA.', 'error');
+                return;
+            }
+
+            // 1. Bersihkan dan format nomor HP (Ubah awalan 0 menjadi 62)
+            let hp = no_hp.toString().trim().replace(/[^0-9]/g, ''); 
+            if (hp.startsWith('0')) {
+                hp = '62' + hp.substring(1);
+            }
+
+            // 2. Siapkan Pesan berdasarkan status
+            let pesan = "";
+            if (status === 'Diterima') {
+                pesan = `Assalamu'alaikum Sdr/i *${nama}*,\n\nSelamat! Anda dinyatakan *DITERIMA* di MAS Manba'ussalam.\n\nSilakan login ke portal PMB untuk melengkapi sisa data dan mengunggah berkas pendaftaran ulang melalui link berikut:\n🔗 https://mbs163.github.io/portal-app\n\n*(Gunakan NISN sebagai ID dan Tanggal Lahir sebagai Password untuk masuk).*`;
+            } 
+            else if (status === 'Ditolak') {
+                pesan = `Assalamu'alaikum Sdr/i *${nama}*,\n\nMohon maaf, berdasarkan hasil seleksi, pendaftaran Anda di MAS Manba'ussalam saat ini belum dapat kami terima.\n\nTetap semangat dan semoga sukses di tempat lain. Terima kasih.`;
+            } 
+            else {
+                pesan = `Assalamu'alaikum Sdr/i *${nama}*,\n\nData pendaftaran awal Anda di MAS Manba'ussalam telah kami terima dan saat ini sedang *Diproses*. Mohon tunggu informasi selanjutnya maksimal 1x24 jam.`;
+            }
+
+            // 3. Buka WhatsApp Web/App
+            let urlWA = `https://wa.me/${hp}?text=${encodeURIComponent(pesan)}`;
+            window.open(urlWA, '_blank');
         }
 
         function exportToExcel() {
