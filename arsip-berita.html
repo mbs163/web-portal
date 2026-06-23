@@ -4,32 +4,43 @@
     <meta charset="UTF-8">
     <title>Arsip Berita | MAS MANBA'USSALAM</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    </head>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#0F766E',accent:'#D4AF37',bgLight:'#F9FAFB'}}}}</script>
+</head>
 <body class="bg-bgLight font-sans">
-    <main class="max-w-7xl mx-auto px-4 py-20">
-        <h2 class="text-3xl font-bold text-primary mb-12">Semua Berita & Pengumuman</h2>
+
+    <main class="max-w-7xl mx-auto px-4 py-16">
+        <h2 class="text-3xl font-bold text-slate-900 mb-8 text-center">Arsip Berita</h2>
         
-        <div id="arsip-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            </div>
+        <div class="flex flex-wrap gap-2 justify-center mb-12" id="filter-container">
+            <button onclick="filterBerita('Semua')" class="px-4 py-2 rounded-full bg-primary text-white text-sm font-bold">Semua</button>
+            <button onclick="filterBerita('Akademik')" class="px-4 py-2 rounded-full bg-white border border-slate-200 text-slate-600 text-sm font-bold hover:bg-emerald-50">Akademik</button>
+            <button onclick="filterBerita('Kesiswaan')" class="px-4 py-2 rounded-full bg-white border border-slate-200 text-slate-600 text-sm font-bold hover:bg-emerald-50">Kesiswaan</button>
+        </div>
+
+        <div id="arsip-container" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
     </main>
 
     <script>
-        fetch('data/berita.json')
-        .then(r => r.json())
-        .then(data => {
+        let allData = [];
+        fetch('data/berita.json').then(r => r.json()).then(data => { allData = data; render(data); });
+
+        function render(data) {
             const container = document.getElementById('arsip-container');
-            // Menampilkan SEMUA data tanpa slice(0,3)
             container.innerHTML = data.map(b => `
-                <a href="detail-berita.html?slug=${b.slug}" class="bg-white rounded-2xl overflow-hidden border shadow-sm hover:shadow-lg transition-all">
-                    <img src="${b.gambar}" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <span class="text-xs font-bold text-primary uppercase">${b.kategori}</span>
-                        <h3 class="font-bold text-lg mt-2">${b.judul}</h3>
-                        <p class="text-sm text-slate-500 mt-2">${b.tanggal}</p>
-                    </div>
+                <a href="detail-berita.html?slug=${b.slug}" class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 hover:shadow-xl transition-all">
+                    <img src="${b.gambar}" class="w-full h-48 object-cover rounded-xl mb-4">
+                    <span class="text-emerald-600 text-[10px] font-bold uppercase">${b.kategori}</span>
+                    <h3 class="font-bold text-md mt-1">${b.judul}</h3>
                 </a>
             `).join('');
-        });
+        }
+
+        function filterBerita(kat) {
+            const filtered = kat === 'Semua' ? allData : allData.filter(b => b.kategori === kat);
+            render(filtered);
+        }
     </script>
 </body>
 </html>
