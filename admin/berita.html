@@ -9,160 +9,384 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
-        tailwind.config = {
-            theme: { extend: { colors: { primary: '#0B1F3B', accent: '#D4AF37', bgLight: '#F8FAFC' } } }
-        }
-        if (localStorage.getItem('userRole') !== 'admin') {
-            window.location.href = 'https://mbs163.github.io/portal-app/login.html';
-        }
+        tailwind.config = { theme: { extend: { colors: { primary: '#0B1F3B', accent: '#D4AF37', bgLight: '#F8FAFC', textDark: '#0F172A' }, fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] } } } }
+        if (localStorage.getItem('userRole') !== 'admin') { window.location.href = 'https://mbs163.github.io/portal-app/login.html'; }
     </script>
 </head>
-<body class="bg-bgLight text-slate-800 font-sans antialiased flex h-screen overflow-hidden">
+<body class="bg-bgLight text-textDark font-sans antialiased flex h-screen overflow-hidden">
 
-    <!-- SIDEBAR -->
-    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-primary text-white flex flex-col h-full shadow-2xl transform -translate-x-full md:translate-x-0 md:relative transition-transform duration-300">
-        <div class="p-6 border-b border-white/10">
-            <h2 class="font-bold tracking-wide">Admin Portal</h2>
-            <p class="text-[10px] text-accent uppercase tracking-widest">MAS Manba'ussalam</p>
-        </div>
-        <div class="flex-1 py-6 px-4 space-y-1">
-            <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-white/10"><i class="fa-solid fa-house w-5"></i> Dashboard</a>
-            <div class="pt-4 pb-2 text-[10px] font-bold text-slate-500 uppercase px-3">Konten</div>
-            <a href="berita.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-accent bg-white/10 font-bold"><i class="fa-solid fa-newspaper w-5"></i> Berita Web</a>
-            <a href="admin-galeri.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-white/10"><i class="fa-solid fa-images w-5"></i> Galeri Foto</a>
-        </div>
-        <div class="p-4 border-t border-white/10"><button onclick="logout()" class="w-full text-red-400 text-sm font-bold"><i class="fa-solid fa-power-off"></i> Keluar</button></div>
-    </aside>
+    <div id="mobile-overlay" class="fixed inset-0 bg-slate-900/60 z-30 hidden md:hidden transition-opacity" onclick="toggleSidebar()"></div>
 
-    <main class="flex-1 overflow-y-auto p-6 sm:p-10">
-        <!-- TABS -->
-        <div class="flex gap-4 mb-8">
-            <button onclick="showTab('create')" id="tab-create" class="px-6 py-2 rounded-xl font-bold bg-primary text-white">Tulis Berita</button>
-            <button onclick="showTab('list')" id="tab-list" class="px-6 py-2 rounded-xl font-bold bg-white text-slate-500 border border-slate-200">Daftar Berita</button>
-        </div>
-
-        <!-- FORM CREATE / EDIT -->
-        <div id="section-create" class="max-w-3xl bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
-            <h2 id="form-title" class="text-2xl font-bold mb-6">Tulis Berita Baru</h2>
-            <form id="newsForm" class="space-y-4">
-                <input type="hidden" id="edit-id">
-                <input type="text" id="judul" required class="w-full p-3 border rounded-xl" placeholder="Judul Berita">
-                <div class="grid grid-cols-2 gap-4">
-                    <input type="text" id="tanggal" required class="w-full p-3 border rounded-xl" placeholder="Tanggal (Contoh: 15 Okt 2026)">
-                    <select id="kategori" class="w-full p-3 border rounded-xl">
-                        <option>Prestasi</option><option>Akademik</option><option>Kesiswaan</option><option>Kepegawaian</option><option>Informasi Publik</option>
-                    </select>
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-primary text-white flex flex-col h-full overflow-y-auto shadow-2xl transform -translate-x-full md:translate-x-0 md:relative transition-transform duration-300 ease-in-out">
+        <div class="p-6 flex items-center justify-between border-b border-white/10 sticky top-0 bg-primary z-10">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-accent rounded-xl flex items-center justify-center text-primary text-xl font-bold"><i class="fa-solid fa-shield-halved"></i></div>
+                <div>
+                    <h2 class="font-bold tracking-wide leading-tight">Admin Portal</h2>
+                    <p class="text-[10px] text-accent uppercase tracking-widest">MAS Manba'ussalam</p>
                 </div>
-                <input type="text" id="gambar" required class="w-full p-3 border rounded-xl" placeholder="URL Gambar (assets/images/foto.jpg)">
-                <!-- INPUT EDITOR TAMBAHAN -->
-                <input type="text" id="editor" required class="w-full p-3 border rounded-xl" placeholder="Nama Editor">
-                
-                <textarea id="konten" required class="w-full p-3 border rounded-xl h-32" placeholder="Isi berita..."></textarea>
-                <button type="submit" class="w-full bg-primary text-white p-4 rounded-xl font-bold hover:bg-slate-900">Simpan Perubahan</button>
-            </form>
+            </div>
+            <button onclick="toggleSidebar()" class="md:hidden text-white/50 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
         </div>
 
-        <!-- TAB LIST -->
-        <div id="section-list" class="hidden bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
-            <h2 class="text-2xl font-bold mb-6">Daftar Berita</h2>
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left">
-                    <thead class="text-xs text-slate-400 uppercase border-b"><tr><th class="p-3">Judul</th><th class="p-3">Kategori</th><th class="p-3">Aksi</th></tr></thead>
-                    <tbody id="news-table-body"></tbody>
-                </table>
+        <div class="flex-1 py-6 px-4 space-y-8">
+            <div>
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 px-2">Kelola Konten Publik</h3>
+                <ul class="space-y-1">
+                    <li>
+                        <a href="berita.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-accent bg-white/10 font-bold hover:bg-white/20 transition-all shadow-inner border border-white/5">
+                            <i class="fa-solid fa-newspaper w-5 text-center"></i> Berita Utama
+                        </a>
+                    </li>
+                    <li><a href="admin-profil-data.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-white/10 transition-all"><i class="fa-solid fa-building-columns w-5 text-center"></i> Profil Web</a></li>
+                    <li><a href="admin-galeri.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-white/10 transition-all"><i class="fa-solid fa-images w-5 text-center"></i> Galeri Web</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 px-2">Sistem Aplikasi Utama</h3>
+                <ul class="space-y-1">
+                    <li><a href="admin-pmb.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-white/10 transition-all"><i class="fa-solid fa-user-graduate w-5 text-center"></i> Manajemen PMB</a></li>
+                    <li><a href="admin-simpeg.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-white/10 transition-all"><i class="fa-solid fa-id-card w-5 text-center"></i> Data SIMPEG</a></li>
+                    <li><a href="admin-alumni.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-white/10 transition-all"><i class="fa-solid fa-certificate w-5 text-center"></i> Verifikasi Ijazah</a></li>
+                    <li><a href="admin-angket.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-white/10 transition-all"><i class="fa-solid fa-clipboard-question w-5 text-center"></i> Angket Peminatan</a></li>
+                </ul>
             </div>
         </div>
+        
+        <div class="p-4 border-t border-white/10">
+            <button onclick="logout()" class="w-full flex items-center justify-center gap-2 py-2.5 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white rounded-lg text-sm font-bold transition-all"><i class="fa-solid fa-power-off"></i> Keluar Sistem</button>
+        </div>
+    </aside>
 
-        <!-- OUTPUT AREA -->
-        <div id="resultArea" class="hidden mt-8 bg-slate-900 p-6 rounded-2xl text-white">
-            <h3 class="font-bold mb-4 text-accent">Hasil JSON (Copy & Paste ke file berita.json)</h3>
-            <textarea id="jsonOutput" class="w-full bg-slate-950 p-4 rounded-lg font-mono text-xs h-64 border border-slate-700"></textarea>
-            <a href="https://github.com/mbs163/web-portal/edit/main/data/berita.json" target="_blank" class="block text-center mt-4 bg-emerald-600 p-3 rounded-xl font-bold">Buka GitHub untuk Paste</a>
+    <main class="flex-1 flex flex-col h-full overflow-y-auto bg-slate-50 relative">
+        <header class="bg-white shadow-sm border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="md:hidden text-slate-500 hover:text-primary transition-colors focus:outline-none"><i class="fa-solid fa-bars text-xl"></i></button>
+                <div class="flex items-center text-sm text-slate-500 hidden sm:flex gap-2">
+                    <a href="index.html" class="hover:text-primary"><i class="fa-solid fa-house"></i> Dashboard</a>
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i><span class="font-bold text-primary">Manajemen Berita</span>
+                </div>
+            </div>
+            <div class="text-sm font-medium text-slate-500 flex items-center gap-2"><i class="fa-regular fa-user mr-1"></i> <span id="admin-name">Admin</span></div>
+        </header>
+
+        <div class="p-6 sm:p-10 max-w-7xl mx-auto w-full">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-slate-800 mb-2">Manajemen Berita Web</h2>
+                    <p class="text-slate-500 text-sm">Tulis, edit, dan publikasikan berita sekolah langsung ke website utama.</p>
+                </div>
+                <div id="api-status" class="hidden px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-circle-notch fa-spin"></i> Menghubungkan ke GitHub...
+                </div>
+            </div>
+
+            <div class="flex gap-4 mb-6">
+                <button onclick="showTab('list')" id="tab-list" class="px-6 py-2.5 rounded-xl font-bold bg-primary text-white shadow-md transition-all">Daftar Berita</button>
+                <button onclick="showTab('create')" id="tab-create" class="px-6 py-2.5 rounded-xl font-bold bg-white text-slate-500 border border-slate-200 hover:bg-slate-50 transition-all"><i class="fa-solid fa-plus mr-1"></i> Tulis Berita</button>
+            </div>
+
+            <div id="section-list" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left">
+                        <thead class="text-xs text-slate-500 uppercase bg-slate-50 border-b border-slate-200">
+                            <tr><th class="px-6 py-4">Judul & Tanggal</th><th class="px-6 py-4">Kategori</th><th class="px-6 py-4 text-right">Aksi</th></tr>
+                        </thead>
+                        <tbody id="news-table-body" class="divide-y divide-slate-100">
+                            <tr><td colspan="3" class="text-center py-8 text-slate-400">Memuat data berita...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="section-create" class="hidden max-w-4xl bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200">
+                <h3 id="form-title" class="text-xl font-bold mb-6 text-primary border-b pb-2">Tulis Berita Baru</h3>
+                <form id="newsForm" class="space-y-5">
+                    <input type="hidden" id="edit-id">
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Judul Berita <span class="text-red-500">*</span></label>
+                        <input type="text" id="judul" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all" placeholder="Masukkan judul berita...">
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Tanggal Publikasi <span class="text-red-500">*</span></label>
+                            <input type="text" id="tanggal" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all" placeholder="Contoh: 15 Juli 2026">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Kategori <span class="text-red-500">*</span></label>
+                            <select id="kategori" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all">
+                                <option value="Pengumuman">Pengumuman</option>
+                                <option value="Prestasi">Prestasi</option>
+                                <option value="Akademik">Akademik</option>
+                                <option value="Kesiswaan">Kesiswaan</option>
+                                <option value="Informasi Publik">Informasi Publik</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">URL Gambar / Thumbnail <span class="text-red-500">*</span></label>
+                            <input type="text" id="gambar" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all" placeholder="https://... atau assets/galeri/foto.jpg">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Nama Penulis / Editor <span class="text-red-500">*</span></label>
+                            <input type="text" id="editor" required class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all" placeholder="Nama Anda">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Isi Berita <span class="text-red-500">*</span></label>
+                        <textarea id="konten" required class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all h-48" placeholder="Tuliskan isi berita di sini..."></textarea>
+                    </div>
+                    
+                    <div class="pt-4 border-t border-slate-100 flex justify-end gap-3">
+                        <button type="button" onclick="showTab('list')" class="px-6 py-3 rounded-xl font-bold bg-slate-200 text-slate-700 hover:bg-slate-300 transition-all">Batal</button>
+                        <button type="submit" class="px-8 py-3 bg-primary text-white rounded-xl font-bold hover:bg-slate-900 transition-all shadow-md flex items-center gap-2">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Simpan & Publikasikan
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </main>
 
-   <script>
-    let newsData = [];
-
-    // 1. Logic Load Data (Cek LocalStorage dulu, jika tidak ada baru ambil dari file JSON)
-    document.addEventListener("DOMContentLoaded", () => {
-        const localData = localStorage.getItem('newsDataCache');
-        if (localData) {
-            newsData = JSON.parse(localData);
-            renderTable();
-        } else {
-            fetch('data/berita.json')
-                .then(r => r.json())
-                .then(data => {
-                    newsData = data;
-                    localStorage.setItem('newsDataCache', JSON.stringify(data)); // Simpan ke storage
-                    renderTable();
-                });
-        }
-    });
-
-    function showTab(tab) {
-        document.getElementById('section-create').classList.toggle('hidden', tab !== 'create');
-        document.getElementById('section-list').classList.toggle('hidden', tab !== 'list');
-        // ... (sisanya sama seperti kode lama Anda)
-    }
-
-    function renderTable() {
-        const tbody = document.getElementById('news-table-body');
-        tbody.innerHTML = newsData.map(n => `
-            <tr class="border-b">
-                <td class="p-3 font-medium">${n.judul}</td>
-                <td class="p-3 text-slate-500">${n.kategori}</td>
-                <td class="p-3 flex gap-2">
-                    <button onclick="editNews(${n.id})" class="text-blue-600 hover:underline">Edit</button>
-                    <button onclick="deleteNews(${n.id})" class="text-red-600 hover:underline">Hapus</button>
-                </td>
-            </tr>
-        `).join('');
-    }
-
-    document.getElementById('newsForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const id = document.getElementById('edit-id').value;
-        const newObj = {
-            id: id ? parseInt(id) : new Date().getTime(),
-            judul: document.getElementById('judul').value,
-            tanggal: document.getElementById('tanggal').value,
-            kategori: document.getElementById('kategori').value,
-            konten: document.getElementById('konten').value,
-            editor: document.getElementById('editor').value,
-            gambar: document.getElementById('gambar').value,
-            slug: document.getElementById('judul').value.toLowerCase().replace(/ /g,'-')
-        };
-
-        if (id) {
-            const index = newsData.findIndex(n => n.id == id);
-            newsData[index] = newObj;
-        } else {
-            newsData.unshift(newObj);
-        }
+    <script>
+        // ==========================================
+        // KONFIGURASI GITHUB API
+        // ==========================================
+        const REPO_OWNER = "mbs163";
+        const REPO_NAME = "web-portal";
+        const FILE_PATH = "data/berita.json"; // Path ke file JSON
+        // PASTE TOKEN GITHUB ANDA DI BAWAH INI
+        const GITHUB_TOKEN = "MASUKKAN_TOKEN_GITHUB_ANDA_DI_SINI"; 
         
-        // Simpan perubahan ke LocalStorage
-        localStorage.setItem('newsDataCache', JSON.stringify(newsData));
-        updateOutput();
-    });
+        const API_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
 
-    function deleteNews(id) {
-        newsData = newsData.filter(n => n.id != id);
-        // Simpan perubahan ke LocalStorage
-        localStorage.setItem('newsDataCache', JSON.stringify(newsData));
-        updateOutput();
-    }
+        let newsData = [];
+        let fileSha = ""; // Menyimpan SHA file untuk update
 
-    function updateOutput() {
-        document.getElementById('jsonOutput').value = JSON.stringify(newsData, null, 2);
-        document.getElementById('resultArea').classList.remove('hidden');
-        renderTable();
-        Swal.fire('Berhasil!', 'Data tersimpan di browser.', 'success');
-    }
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById('admin-name').innerText = localStorage.getItem('userName') || 'Administrator';
+            document.getElementById('editor').value = localStorage.getItem('userName') || 'Admin'; // Auto-fill nama admin
+            fetchBeritaFromGitHub();
+        });
 
-    function logout() { localStorage.removeItem('userRole'); window.location.href = 'https://mbs163.github.io/portal-app/login.html'; }
-    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
-</script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('-translate-x-full');
+            document.getElementById('mobile-overlay').classList.toggle('hidden');
+        }
+
+        function logout() {
+            Swal.fire({
+                title: 'Keluar Sistem?', text: "Anda akan diarahkan kembali ke halaman login.", icon: 'warning',
+                showCancelButton: true, confirmButtonColor: '#e11d48', cancelButtonColor: '#0B1F3B', confirmButtonText: 'Ya, Keluar'
+            }).then((res) => {
+                if (res.isConfirmed) {
+                    localStorage.removeItem('userRole'); localStorage.removeItem('userName');
+                    window.location.href = 'https://mbs163.github.io/portal-app/login.html';
+                }
+            })
+        }
+
+        function showTab(tab) {
+            document.getElementById('section-create').classList.toggle('hidden', tab !== 'create');
+            document.getElementById('section-list').classList.toggle('hidden', tab !== 'list');
+            
+            if (tab === 'create') {
+                document.getElementById('tab-create').classList.replace('bg-white', 'bg-primary');
+                document.getElementById('tab-create').classList.replace('text-slate-500', 'text-white');
+                document.getElementById('tab-list').classList.replace('bg-primary', 'bg-white');
+                document.getElementById('tab-list').classList.replace('text-white', 'text-slate-500');
+                if(!document.getElementById('edit-id').value) {
+                    document.getElementById('form-title').innerText = "Tulis Berita Baru";
+                }
+            } else {
+                document.getElementById('tab-list').classList.replace('bg-white', 'bg-primary');
+                document.getElementById('tab-list').classList.replace('text-slate-500', 'text-white');
+                document.getElementById('tab-create').classList.replace('bg-primary', 'bg-white');
+                document.getElementById('tab-create').classList.replace('text-white', 'text-slate-500');
+                document.getElementById('newsForm').reset();
+                document.getElementById('edit-id').value = "";
+                document.getElementById('editor').value = localStorage.getItem('userName') || 'Admin';
+            }
+        }
+
+        // 1. TARIK DATA DARI GITHUB
+        async function fetchBeritaFromGitHub() {
+            setStatusAPI('loading', 'Menghubungkan ke server...');
+            try {
+                // Perhatikan: Karena admin/berita.html ada di subfolder, fallback ke local fetch menggunakan '../'
+                const response = await fetch(API_URL, { headers: { 'Authorization': `token ${GITHUB_TOKEN}` } });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    fileSha = data.sha; // Simpan SHA untuk keperluan UPDATE nanti
+                    
+                    // Decode konten base64 dari GitHub
+                    const decodedContent = decodeURIComponent(escape(atob(data.content)));
+                    newsData = JSON.parse(decodedContent);
+                    
+                    renderTable();
+                    setStatusAPI('success', 'Data tersinkronisasi');
+                } else if (response.status === 404) {
+                    // File belum ada di GitHub
+                    newsData = [];
+                    renderTable();
+                    setStatusAPI('warning', 'File berita.json belum ada');
+                } else {
+                    throw new Error("Gagal mengambil data");
+                }
+            } catch (error) {
+                console.error(error);
+                // Fallback jika API Error (Ambil dari file statis menggunakan ../)
+                fetch('../data/berita.json')
+                    .then(res => res.json())
+                    .then(data => {
+                        newsData = data;
+                        renderTable();
+                        setStatusAPI('error', 'Mode Offline (Cek Token)');
+                    })
+                    .catch(err => {
+                        document.getElementById('news-table-body').innerHTML = `<tr><td colspan="3" class="text-center py-8 text-red-500">Gagal memuat data sama sekali. Cek koneksi.</td></tr>`;
+                    });
+            }
+        }
+
+        // 2. TAMPILKAN KE TABEL
+        function renderTable() {
+            const tbody = document.getElementById('news-table-body');
+            if (newsData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" class="text-center py-8 text-slate-500">Belum ada berita yang dipublikasikan.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = newsData.map(n => `
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="px-6 py-4">
+                        <div class="font-bold text-slate-800">${n.judul}</div>
+                        <div class="text-xs text-slate-500"><i class="fa-regular fa-calendar mr-1"></i> ${n.tanggal} &bull; <i class="fa-solid fa-user-pen mr-1"></i> ${n.editor}</div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-md text-xs font-bold">${n.kategori}</span>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <button onclick="editNews(${n.id})" class="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors mr-2"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button onclick="deleteNews(${n.id})" class="text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors"><i class="fa-solid fa-trash-can"></i> Hapus</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // 3. EDIT BERITA (Masuk ke Form)
+        function editNews(id) {
+            const n = newsData.find(item => item.id == id);
+            if (n) {
+                document.getElementById('edit-id').value = n.id;
+                document.getElementById('judul').value = n.judul;
+                document.getElementById('tanggal').value = n.tanggal;
+                document.getElementById('kategori').value = n.kategori;
+                document.getElementById('gambar').value = n.gambar;
+                document.getElementById('editor').value = n.editor;
+                document.getElementById('konten').value = n.konten;
+                
+                document.getElementById('form-title').innerText = "Edit Berita";
+                showTab('create');
+            }
+        }
+
+        // 4. SUBMIT FORM (Tambah / Update Array Lokal)
+        document.getElementById('newsForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('edit-id').value;
+            const newObj = {
+                id: id ? parseInt(id) : new Date().getTime(),
+                judul: document.getElementById('judul').value,
+                tanggal: document.getElementById('tanggal').value,
+                kategori: document.getElementById('kategori').value,
+                konten: document.getElementById('konten').value,
+                editor: document.getElementById('editor').value,
+                gambar: document.getElementById('gambar').value,
+                slug: document.getElementById('judul').value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '')
+            };
+
+            if (id) {
+                const index = newsData.findIndex(n => n.id == id);
+                newsData[index] = newObj;
+            } else {
+                newsData.unshift(newObj); // Taruh di paling atas
+            }
+            
+            // Langsung Push ke GitHub
+            pushToGitHub("Memperbarui data berita");
+        });
+
+        // 5. HAPUS BERITA
+        function deleteNews(id) {
+            Swal.fire({
+                title: 'Hapus Berita?', text: "Berita ini akan hilang dari website publik.", icon: 'warning',
+                showCancelButton: true, confirmButtonColor: '#e11d48', cancelButtonColor: '#0B1F3B', confirmButtonText: 'Ya, Hapus'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    newsData = newsData.filter(n => n.id != id);
+                    pushToGitHub("Menghapus berita");
+                }
+            })
+        }
+
+        // 6. PUSH KE GITHUB (Core Engine)
+        async function pushToGitHub(commitMessage) {
+            Swal.fire({ title: 'Menyimpan ke Web...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            
+            try {
+                // Encode JSON ke Base64 (Aman untuk karakter khusus / bahasa Indonesia)
+                const jsonString = JSON.stringify(newsData, null, 2);
+                const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
+
+                const payload = {
+                    message: commitMessage,
+                    content: base64Content,
+                    sha: fileSha || undefined // Wajib menyertakan SHA lama jika file sudah ada
+                };
+
+                const response = await fetch(API_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    fileSha = data.content.sha; // Update SHA dengan yang baru
+                    
+                    Swal.fire('Berhasil!', 'Website publik telah diperbarui.', 'success');
+                    renderTable();
+                    showTab('list');
+                } else {
+                    const err = await response.json();
+                    throw new Error(err.message);
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire('Gagal Menyimpan', 'Terjadi kesalahan komunikasi dengan GitHub. Cek Token API Anda.', 'error');
+            }
+        }
+
+        // Fungsi UI kecil untuk Status
+        function setStatusAPI(status, message) {
+            const el = document.getElementById('api-status');
+            el.classList.remove('hidden');
+            if(status === 'loading') { el.className = "px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 bg-blue-100 text-blue-700"; el.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> ${message}`; }
+            if(status === 'success') { el.className = "px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 bg-emerald-100 text-emerald-700"; el.innerHTML = `<i class="fa-solid fa-check"></i> ${message}`; }
+            if(status === 'warning') { el.className = "px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 bg-amber-100 text-amber-700"; el.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${message}`; }
+            if(status === 'error') { el.className = "px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 bg-red-100 text-red-700"; el.innerHTML = `<i class="fa-solid fa-xmark"></i> ${message}`; }
+        }
+    </script>
 </body>
 </html>
