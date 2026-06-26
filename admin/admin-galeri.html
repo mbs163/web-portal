@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Galeri | Admin MAS MANBA'USSALAM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = { theme: { extend: { colors: { primary: '#0B1F3B', accent: '#D4AF37', bgLight: '#F8FAFC', textDark: '#0F172A' }, fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] } } } }
+        // Penjaga Keamanan
+        if (localStorage.getItem('userRole') !== 'admin') { window.location.href = 'https://mbs163.github.io/portal-app/login.html'; }
+    </script>
+</head>
+<body class="bg-bgLight text-textDark font-sans antialiased flex h-screen overflow-hidden">
+
+    <div id="mobile-overlay" class="fixed inset-0 bg-slate-900/60 z-30 hidden md:hidden transition-opacity" onclick="toggleSidebar()"></div>
+
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-primary text-white flex flex-col h-full overflow-y-auto shadow-2xl transform -translate-x-full md:translate-x-0 md:relative transition-transform duration-300 ease-in-out">
+        <div class="p-6 flex items-center justify-between border-b border-white/10 sticky top-0 bg-primary z-10">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-accent rounded-xl flex items-center justify-center text-primary text-xl font-bold"><i class="fa-solid fa-shield-halved"></i></div>
+                <div><h2 class="font-bold tracking-wide leading-tight">Admin Portal</h2><p class="text-[10px] text-accent uppercase tracking-widest">MAS Manba'ussalam</p></div>
+            </div>
+            <button onclick="toggleSidebar()" class="md:hidden text-white/50 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+        </div>
+
+        <div class="flex-1 py-6 px-4 space-y-8">
+            <div>
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 px-2">Kelola Konten Publik</h3>
+                <ul class="space-y-1">
+                    <li><a href="berita.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-white/10 transition-all"><i class="fa-solid fa-newspaper w-5 text-center"></i> Berita Utama</a></li>
+                    <li><a href="admin-profil-data.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-300 hover:text-white hover:bg-white/10 transition-all"><i class="fa-solid fa-building-columns w-5 text-center"></i> Profil Web</a></li>
+                    <li>
+                        <a href="admin-galeri.html" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-accent bg-white/10 font-bold hover:bg-white/20 transition-all shadow-inner border border-white/5">
+                            <i class="fa-solid fa-images w-5 text-center"></i> Galeri Web Publik
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="p-4 border-t border-white/10">
+            <button onclick="logout()" class="w-full flex items-center justify-center gap-2 py-2.5 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white rounded-lg text-sm font-bold transition-all"><i class="fa-solid fa-power-off"></i> Keluar Sistem</button>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-full overflow-y-auto bg-slate-50 relative">
+        <header class="bg-white shadow-sm border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="md:hidden text-slate-500 hover:text-primary transition-colors focus:outline-none"><i class="fa-solid fa-bars text-xl"></i></button>
+                <div class="flex items-center text-sm text-slate-500 hidden sm:flex gap-2">
+                    <a href="index.html" class="hover:text-primary"><i class="fa-solid fa-house"></i> Dashboard</a>
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i><span class="font-bold text-primary">Manajemen Galeri Web</span>
+                </div>
+            </div>
+            <div class="text-sm font-medium text-slate-500 flex items-center gap-2"><i class="fa-regular fa-user mr-1"></i> <span id="admin-name">Admin</span></div>
+        </header>
+
+        <div class="p-6 sm:p-10 max-w-7xl mx-auto w-full">
+            <div class="mb-8">
+                <h2 class="text-3xl font-extrabold text-slate-800 mb-2">Galeri Foto Web</h2>
+                <p class="text-slate-500 text-sm">File akan diunggah langsung ke penyimpanan GitHub, memastikan *loading* web publik tetap super cepat.</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-10">
+                <h3 class="font-bold text-slate-800 mb-4 border-b pb-2 text-sm uppercase tracking-wider"><i class="fa-brands fa-github text-primary mr-2"></i> Unggah via GitHub API</h3>
+                
+                <div class="flex flex-col sm:flex-row gap-4 items-center">
+                    <div class="flex-1 w-full relative border-2 border-dashed border-slate-300 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors py-8 text-center cursor-pointer overflow-hidden group">
+                        <input type="file" id="fileGaleri" accept="image/jpeg, image/png, image/webp" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="previewFileName()">
+                        <div class="flex flex-col items-center gap-2 pointer-events-none">
+                            <i class="fa-regular fa-image text-4xl text-slate-400 group-hover:text-primary transition-colors"></i>
+                            <p class="text-sm font-medium text-slate-600" id="file-name-label">Klik atau seret gambar ke sini (JPG/PNG/WEBP)</p>
+                        </div>
+                    </div>
+                    <button onclick="uploadFotoGitHub()" class="w-full sm:w-auto bg-primary hover:bg-slate-900 text-white px-8 py-4 rounded-xl font-bold transition-all shadow-md whitespace-nowrap">
+                        <i class="fa-solid fa-cloud-arrow-up mr-2"></i> Simpan ke Web
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="font-bold text-slate-800 mb-4 text-sm uppercase tracking-wider"><i class="fa-solid fa-images text-accent mr-2"></i> Foto Live di Web Saat Ini</h3>
+                
+                <div id="loading-galeri" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 animate-pulse">
+                    <div class="bg-slate-200 aspect-video rounded-2xl"></div>
+                    <div class="bg-slate-200 aspect-video rounded-2xl"></div>
+                    <div class="bg-slate-200 aspect-video rounded-2xl"></div>
+                </div>
+
+                <div id="grid-galeri" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 hidden"></div>
+                
+                <div id="empty-state" class="hidden text-center py-16 bg-white rounded-2xl border border-slate-200 border-dashed">
+                    <i class="fa-regular fa-folder-open text-6xl text-slate-300 mb-4"></i>
+                    <p class="font-bold text-slate-500">Folder galeri di GitHub kosong.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ==========================================
+        // KONFIGURASI GITHUB API (SESUAIKAN INI)
+        // ==========================================
+        const REPO_OWNER = "mbs163";
+        const REPO_NAME = "web-portal";
+        const FOLDER_PATH = "assets/galeri"; // Folder di repo tempat menyimpan gambar
+        // PASTE TOKEN GITHUB ANDA DI BAWAH INI (Yang berawalan github_pat_...)
+        const GITHUB_TOKEN = "MASUKKAN_TOKEN_GITHUB_ANDA_DI_SINI"; 
+        
+        const API_BASE_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FOLDER_PATH}`;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById('admin-name').innerText = localStorage.getItem('userName') || 'Administrator';
+            loadGaleriGitHub();
+        });
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('-translate-x-full');
+            document.getElementById('mobile-overlay').classList.toggle('hidden');
+        }
+
+        function logout() {
+            Swal.fire({
+                title: 'Keluar Sistem?', text: "Anda akan kembali ke halaman login.", icon: 'warning',
+                showCancelButton: true, confirmButtonColor: '#e11d48', cancelButtonColor: '#0B1F3B', confirmButtonText: 'Keluar'
+            }).then((res) => {
+                if (res.isConfirmed) {
+                    localStorage.removeItem('userRole'); localStorage.removeItem('userName');
+                    window.location.href = 'https://mbs163.github.io/portal-app/login.html';
+                }
+            })
+        }
+
+        function previewFileName() {
+            const file = document.getElementById('fileGaleri').files[0];
+            const label = document.getElementById('file-name-label');
+            if (file) { label.innerHTML = `<span class="text-primary font-bold">${file.name}</span> (${(file.size/1024/1024).toFixed(2)} MB)`; } 
+            else { label.innerText = "Klik atau seret gambar ke sini (JPG/PNG/WEBP)"; }
+        }
+
+        // Convert File to Base64 (Syarat wajib GitHub API)
+        const getBase64 = (file) => new Promise((resolve, reject) => {
+            const reader = new FileReader(); reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result.split(',')[1]); // Hanya ambil base64 string-nya
+            reader.onerror = error => reject(error);
+        });
+
+        // UPLOAD FOTO KE GITHUB
+        async function uploadFotoGitHub() {
+            const fileInput = document.getElementById('fileGaleri');
+            const file = fileInput.files[0];
+
+            if (!file) return Swal.fire('Perhatian', 'Pilih foto terlebih dahulu.', 'warning');
+            
+            Swal.fire({ title: 'Menyimpan ke GitHub...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+            try {
+                const base64Data = await getBase64(file);
+                // Buat nama file unik agar tidak bentrok
+                const fileExt = file.name.split('.').pop();
+                const uniqueName = `img_${new Date().getTime()}.${fileExt}`;
+                const apiUrl = `${API_BASE_URL}/${uniqueName}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `Upload galeri baru: ${uniqueName}`,
+                        content: base64Data
+                    })
+                });
+
+                if (response.ok) {
+                    Swal.fire('Berhasil!', 'Foto telah dipublikasikan ke web utama.', 'success');
+                    fileInput.value = ""; previewFileName();
+                    loadGaleriGitHub(); // Segarkan tampilan
+                } else {
+                    const err = await response.json();
+                    throw new Error(err.message || 'Gagal push ke GitHub.');
+                }
+            } catch (error) {
+                console.error(error);
+                Swal.fire('Error', 'Gagal menyimpan file. Cek Token GitHub Anda.', 'error');
+            }
+        }
+
+        // LOAD GALERI DARI GITHUB
+        async function loadGaleriGitHub() {
+            document.getElementById('loading-galeri').classList.remove('hidden');
+            document.getElementById('grid-galeri').classList.add('hidden');
+            document.getElementById('empty-state').classList.add('hidden');
+            document.getElementById('grid-galeri').innerHTML = "";
+
+            try {
+                const response = await fetch(API_BASE_URL, {
+                    headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
+                });
+
+                if (response.status === 404) {
+                    // Folder belum ada (belum pernah upload)
+                    document.getElementById('loading-galeri').classList.add('hidden');
+                    document.getElementById('empty-state').classList.remove('hidden');
+                    return;
+                }
+
+                const files = await response.json();
+                document.getElementById('loading-galeri').classList.add('hidden');
+
+                // Filter hanya file gambar (jpg, png, webp, jpeg)
+                const imageFiles = files.filter(f => f.name.match(/\.(jpg|jpeg|png|webp|gif)$/i));
+
+                if (imageFiles.length === 0) {
+                    document.getElementById('empty-state').classList.remove('hidden');
+                } else {
+                    document.getElementById('grid-galeri').classList.remove('hidden');
+                    // Reverse agar foto terbaru tampil duluan (asumsi nama file pakai timestamp)
+                    imageFiles.reverse().forEach(f => {
+                        // Gunakan raw GitHub Pages link untuk loading gambar yang lebih cepat
+                        const liveUrl = `https://${REPO_OWNER}.github.io/${REPO_NAME}/${FOLDER_PATH}/${f.name}`;
+                        
+                        const card = `
+                            <div class="relative group aspect-video rounded-2xl overflow-hidden bg-slate-200 border border-slate-200 shadow-sm">
+                                <img src="${liveUrl}" alt="${f.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+                                    <button onclick="hapusFotoGitHub('${f.name}', '${f.sha}')" class="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg text-sm font-bold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                        <i class="fa-solid fa-trash-can mr-1"></i> Hapus Foto
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        document.getElementById('grid-galeri').insertAdjacentHTML('beforeend', card);
+                    });
+                }
+            } catch (e) {
+                console.error(e);
+                document.getElementById('loading-galeri').classList.add('hidden');
+                Swal.fire('Error API', 'Gagal memuat galeri. Periksa Token atau koneksi internet.', 'error');
+            }
+        }
+
+        // HAPUS FOTO DARI GITHUB
+        function hapusFotoGitHub(fileName, fileSha) {
+            Swal.fire({
+                title: 'Hapus dari Web?', text: "Foto ini akan dihapus permanen dari repositori GitHub.", icon: 'warning',
+                showCancelButton: true, confirmButtonColor: '#e11d48', cancelButtonColor: '#0B1F3B', confirmButtonText: 'Ya, Hapus'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({ title: 'Menghapus...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+                    try {
+                        const apiUrl = `${API_BASE_URL}/${fileName}`;
+                        const response = await fetch(apiUrl, {
+                            method: 'DELETE',
+                            headers: {
+                                'Authorization': `token ${GITHUB_TOKEN}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                message: `Hapus galeri: ${fileName}`,
+                                sha: fileSha
+                            })
+                        });
+
+                        if (response.ok) {
+                            Swal.fire('Terhapus!', 'Foto telah ditarik dari web.', 'success');
+                            loadGaleriGitHub();
+                        } else {
+                            throw new Error('Gagal menghapus dari GitHub.');
+                        }
+                    } catch(e) {
+                        Swal.fire('Error', 'Gagal menghubungi GitHub.', 'error');
+                    }
+                }
+            })
+        }
+    </script>
+</body>
+</html>
