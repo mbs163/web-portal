@@ -100,7 +100,27 @@
         const FOLDER_PATH = "assets/galeri"; 
         
         // PASTE TOKEN GITHUB ANDA DI BAWAH INI
-        const GITHUB_TOKEN = "MASUKKAN_TOKEN_GITHUB_ANDA_DI_SINI"; 
+        let GITHUB_TOKEN = localStorage.getItem('GITHUB_TOKEN');
+
+if (!GITHUB_TOKEN) {
+    (async () => {
+        const { value: token } = await Swal.fire({
+            title: 'Masukkan Token GitHub Baru',
+            text: 'Token ini disimpan di browser Anda (aman, tidak masuk ke kode)',
+            input: 'password',
+            inputPlaceholder: 'github_pat_...',
+            showCancelButton: true,
+            confirmButtonText: 'Simpan Token',
+            allowOutsideClick: false
+        });
+        
+        if (token) {
+            localStorage.setItem('GITHUB_TOKEN', token);
+            GITHUB_TOKEN = token;
+            window.location.reload(); // Refresh halaman setelah token tersimpan
+        }
+    })();
+}
         const API_BASE_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FOLDER_PATH}`;
 
         document.addEventListener("DOMContentLoaded", () => {
