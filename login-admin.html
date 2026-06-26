@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | MAS MANBA'USSALAM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = { theme: { extend: { colors: { primary: '#0B1F3B', accent: '#D4AF37' } } } }
+    </script>
+</head>
+<body class="bg-slate-50 font-sans h-screen h-[100dvh] flex flex-col items-center justify-center p-4 sm:p-6 overflow-hidden">
+
+    <div id="loading-overlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden flex-col items-center justify-center text-white transition-all">
+        <i class="fa-solid fa-circle-notch fa-spin text-5xl text-accent mb-4"></i>
+        <p class="font-bold tracking-widest uppercase text-sm animate-pulse">Memverifikasi Kredensial...</p>
+    </div>
+
+    <div class="bg-white w-full max-w-4xl rounded-3xl shadow-2xl flex overflow-hidden border border-slate-100 max-h-[600px] flex-1 my-2">
+        
+        <div id="brand-panel" class="hidden md:flex w-1/2 bg-primary p-12 flex-col justify-between text-white relative overflow-hidden">
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+            <div class="relative z-10">
+                <div id="brand-icon" class="w-12 h-12 bg-accent text-primary rounded-xl flex items-center justify-center font-bold text-xl mb-6">M</div>
+                <h2 id="brand-title" class="text-3xl font-extrabold mb-4">Sistem Akademik Terintegrasi</h2>
+                <p id="brand-desc" class="text-slate-300 text-sm leading-relaxed">Kelola administrasi, akademik, dan data madrasah dengan sistem yang aman, cepat, dan modern.</p>
+            </div>
+            <div class="relative z-10 text-xs text-slate-400 font-medium uppercase tracking-widest">&copy; 2026 MAS MANBA'USSALAM</div>
+        </div>
+
+        <div class="w-full md:w-1/2 p-6 sm:p-12 flex flex-col justify-center h-full overflow-y-auto">
+            
+            <div class="md:hidden flex flex-col items-center mb-6">
+                <div class="w-16 h-16 bg-primary text-accent rounded-2xl flex items-center justify-center font-bold text-3xl shadow-lg mb-4">M</div>
+                <h2 class="text-xl font-bold text-slate-900 text-center">Sistem Akademik</h2>
+            </div>
+
+            <form id="form-admin" onsubmit="handleLogin(event, 'admin')" class="space-y-5 animate-in fade-in duration-500 w-full max-w-sm mx-auto">
+                <div class="text-center md:text-left mb-6">
+                    <h3 class="text-xl font-bold text-slate-900 hidden md:block">Pusat Kendali Admin</h3>
+                    <p class="text-sm text-slate-500 mt-1">Masukkan username dan password khusus administrator.</p>
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1 ml-1">Username</label>
+                    <input type="text" id="admin-user" required class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all" placeholder="Ketik username admin...">
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1 ml-1">Password</label>
+                    <input type="password" id="admin-pass" required class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-primary outline-none transition-all" placeholder="••••••••">
+                </div>
+                
+                <button type="submit" class="w-full bg-accent text-primary p-4 rounded-xl font-bold hover:bg-yellow-400 transition-all shadow-md shadow-accent/20 mt-2">
+                    Login Administrator
+                </button>
+            </form>
+
+            <div class="mt-8 text-center">
+                <a href="https://mbs163.github.io/web-portal" class="text-xs font-bold text-slate-400 hover:text-primary transition-colors flex items-center justify-center gap-2 p-2">
+                    <i class="fa-solid fa-arrow-left"></i> Kembali ke Web Portal
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center text-slate-400 text-[10px] font-semibold uppercase tracking-widest mt-2 mb-2 w-full flex-none">
+        &copy; 2026 MAS MANBA'USSALAM &bull; Digital Ecosystem
+    </footer>
+
+    <script>
+        async function handleLogin(e, type) {
+            e.preventDefault();
+            
+            const overlay = document.getElementById('loading-overlay');
+            if(overlay) {
+                overlay.classList.remove('hidden');
+                overlay.classList.add('flex');
+            }
+
+            try {
+                // LOGIKA CERDAS: Mengambil data sesuai jenis form
+                let user, pass;
+                if (type === 'admin') {
+                    user = document.getElementById('admin-user').value;
+                    pass = document.getElementById('admin-pass').value;
+                } else {
+                    user = document.getElementById('user-id').value;
+                    pass = document.getElementById('user-pass').value;
+                }
+
+                // URL Google Apps Script
+                const GAS_URL = "https://script.google.com/macros/s/AKfycbw_6Q-M6_pvGLUZH4IFtefxa3iwStdhyD7nii4lFIMAyYaILCfnbLOp6DnuWChG2HRmpw/exec"; 
+
+                const response = await fetch(GAS_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ username: user, password: pass })
+                });
+                
+                const result = await response.json();
+                
+                if(overlay) {
+                    overlay.classList.add('hidden');
+                    overlay.classList.remove('flex');
+                }
+                
+                if (result.status === "success") {
+                    localStorage.setItem('userRole', result.role);
+                    localStorage.setItem('userName', result.nama);
+                    
+                    Swal.fire({
+                        title: 'Akses Diberikan!',
+                        text: 'Selamat datang kembali, ' + result.nama,
+                        icon: 'success',
+                        iconColor: '#D4AF37',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        backdrop: `rgba(11, 31, 59, 0.4)`
+                    }).then(() => {
+                        if (result.role === 'admin') {
+                            window.location.href = 'https://mbs163.github.io/web-portal/admin/index.html';
+                        } else {
+                            window.location.href = 'login-admin.html'; 
+                        }
+                    });
+
+                } else {
+                    Swal.fire({
+                        title: 'Akses Ditolak!',
+                        text: 'Username atau Password tidak sesuai.',
+                        icon: 'error',
+                        confirmButtonText: 'Coba Lagi',
+                        confirmButtonColor: '#0B1F3B'
+                    });
+                }
+            } catch (error) {
+                if(overlay) {
+                    overlay.classList.add('hidden');
+                    overlay.classList.remove('flex');
+                }
+                
+                Swal.fire({
+                    title: 'Koneksi Gagal!',
+                    text: 'Terjadi kesalahan sistem. Pastikan URL GAS benar & memiliki akses publik.',
+                    icon: 'warning',
+                    confirmButtonText: 'Tutup',
+                    confirmButtonColor: '#0B1F3B'
+                });
+            }
+        }
+    </script>
+</body>
+</html>
