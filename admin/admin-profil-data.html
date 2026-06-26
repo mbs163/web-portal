@@ -114,10 +114,43 @@
 
         let fileSha = "";
 
-        document.addEventListener("DOMContentLoaded", () => {
-            document.getElementById('admin-name').innerText = localStorage.getItem('userName') || 'Administrator';
-            loadProfilData();
+        // GANTI bagian DOMContentLoaded Anda dengan kode ini:
+
+document.addEventListener("DOMContentLoaded", async () => {
+    document.getElementById('admin-name').innerText = localStorage.getItem('userName') || 'Administrator';
+    
+    // 1. Dapatkan token terlebih dahulu (tunggu sampai user masukkan token)
+    const token = await getValidToken(); 
+    
+    // 2. Hanya jalankan load jika token valid
+    if (token) {
+        loadGaleriGitHub();
+    }
+});
+
+// PASTIKAN fungsi ini ada di script Anda agar sistem menunggu token
+async function getValidToken() {
+    let token = localStorage.getItem('GITHUB_TOKEN');
+    
+    if (!token) {
+        const { value: newToken } = await Swal.fire({
+            title: 'Masukkan GitHub Token',
+            text: 'Token diperlukan untuk mengambil data.',
+            input: 'password',
+            inputPlaceholder: 'github_pat_...',
+            showCancelButton: true,
+            allowOutsideClick: false
         });
+        
+        if (newToken) {
+            localStorage.setItem('GITHUB_TOKEN', newToken);
+            return newToken;
+        } else {
+            return null; // User membatalkan
+        }
+    }
+    return token;
+}
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); document.getElementById('mobile-overlay').classList.toggle('hidden'); }
         function logout() { localStorage.removeItem('userRole'); localStorage.removeItem('userName'); window.location.href = 'https://mbs163.github.io/portal-app/login.html'; }
