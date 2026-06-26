@@ -95,71 +95,93 @@
     </main>
 
     <script>
-        const REPO_OWNER = "mbs163";
-        const REPO_NAME = "web-portal";
-        const FOLDER_PATH = "assets/galeri"; 
-        
-        // PASTE TOKEN GITHUB ANDA DI BAWAH INI
-        let GITHUB_TOKEN = localStorage.getItem('GITHUB_TOKEN');
+    const REPO_OWNER = "mbs163";
+    const REPO_NAME = "web-portal";
+    const FOLDER_PATH = "assets/galeri"; 
+    const API_BASE_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FOLDER_PATH}`;
 
-if (!GITHUB_TOKEN) {
-    (async () => {
-        const { value: token } = await Swal.fire({
-            title: 'Masukkan Token GitHub Baru',
-            text: 'Token ini disimpan di browser Anda (aman, tidak masuk ke kode)',
-            input: 'password',
-            inputPlaceholder: 'github_pat_...',
-            showCancelButton: true,
-            confirmButtonText: 'Simpan Token',
-            allowOutsideClick: false
-        });
+    // 1. PUSAT PENGAMBILAN TOKEN (Satu-satunya sumber kebenaran)
+    async function getValidToken() {
+        let token = localStorage.getItem('GITHUB_TOKEN');
+        if (!token) {
+            const { value: newToken } = await Swal.fire({
+                title: 'Masukkan GitHub Token',
+                text: 'Token diperlukan agar dasbor bisa terhubung ke GitHub.',
+                input: 'password',
+                inputPlaceholder: 'github_pat_...',
+                showCancelButton: true,
+                allowOutsideClick: false
+            });
+            if (newToken) {
+                localStorage.setItem('GITHUB_TOKEN', newToken);
+                return newToken;
+            }
+            return null;
+        }
+        return token;
+    }
+
+    // 2. ENTRY POINT (Sistem menunggu di sini)
+    document.addEventListener("DOMContentLoaded", async () => {
+        document.getElementById('admin-name').innerText = localStorage.getItem('userName') || 'Administrator';
         
+        // KITA TUNGGU TOKEN DI SINI
+        const token = await getValidToken();
+        
+        // HANYA JIKA TOKEN ADA, BARU JALANKAN LOAD
         if (token) {
-            localStorage.setItem('GITHUB_TOKEN', token);
-            GITHUB_TOKEN = token;
-            window.location.reload(); // Refresh halaman setelah token tersimpan
-        }
-    })();
-}
-        const API_BASE_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FOLDER_PATH}`;
-
-       // GANTI bagian DOMContentLoaded Anda dengan kode ini:
-
-document.addEventListener("DOMContentLoaded", async () => {
-    document.getElementById('admin-name').innerText = localStorage.getItem('userName') || 'Administrator';
-    
-    // 1. Dapatkan token terlebih dahulu (tunggu sampai user masukkan token)
-    const token = await getValidToken(); 
-    
-    // 2. Hanya jalankan load jika token valid
-    if (token) {
-        loadGaleriGitHub();
-    }
-});
-
-// PASTIKAN fungsi ini ada di script Anda agar sistem menunggu token
-async function getValidToken() {
-    let token = localStorage.getItem('GITHUB_TOKEN');
-    
-    if (!token) {
-        const { value: newToken } = await Swal.fire({
-            title: 'Masukkan GitHub Token',
-            text: 'Token diperlukan untuk mengambil data.',
-            input: 'password',
-            inputPlaceholder: 'github_pat_...',
-            showCancelButton: true,
-            allowOutsideClick: false
-        });
-        
-        if (newToken) {
-            localStorage.setItem('GITHUB_TOKEN', newToken);
-            return newToken;
+            loadGaleriGitHub(token);
         } else {
-            return null; // User membatalkan
+            Swal.fire('Akses Ditolak', 'Anda harus memasukkan token untuk mengakses fitur ini.', 'error');
+        }
+    });
+
+    // 3. LOAD GALERI (Menerima token sebagai parameter)
+    async function loadGaleriGitHub(token) {
+        document.getElementById('loading-galeri').classList.remove('hidden');
+        document.getElementById('grid-galeri').classList.add('hidden');
+        
+        try {
+            const response = await fetch(API_BASE_URL, { 
+                headers: { 'Authorization': `token ${token}` } 
+            });
+
+            // Jika error 401, berarti token mati. Hapus dan reload.
+            if (response.status === 401) {
+                localStorage.removeItem('GITHUB_TOKEN');
+                window.location.reload();
+                return;
+            }
+
+            if (response.status === 404) {
+                document.getElementById('loading-galeri').classList.add('hidden');
+                document.getElementById('empty-state').classList.remove('hidden');
+                return;
+            }
+
+            const files = await response.json();
+            document.getElementById('loading-galeri').classList.add('hidden');
+            
+            const imageFiles = files.filter(f => f.name.match(/\.(jpg|jpeg|png|webp|gif)$/i));
+            
+            if (imageFiles.length === 0) {
+                document.getElementById('empty-state').classList.remove('hidden');
+            } else {
+                document.getElementById('grid-galeri').classList.remove('hidden');
+                document.getElementById('grid-galeri').innerHTML = imageFiles.reverse().map(f => `
+                    <div class="relative group aspect-video rounded-2xl overflow-hidden bg-slate-200 border border-slate-200 shadow-sm">
+                        <img src="https://${REPO_OWNER}.github.io/${REPO_NAME}/${FOLDER_PATH}/${f.name}" alt="${f.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+                            <button onclick="hapusFotoGitHub('${f.name}', '${f.sha}')" class="w-full bg-red-500 text-white py-2 rounded-lg text-sm font-bold shadow-lg">Hapus</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        } catch (e) {
+            document.getElementById('loading-galeri').classList.add('hidden');
+            Swal.fire('Error', 'Gagal memuat galeri.', 'error');
         }
     }
-    return token;
-}
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); document.getElementById('mobile-overlay').classList.toggle('hidden'); }
         function logout() { localStorage.removeItem('userRole'); localStorage.removeItem('userName'); window.location.href = 'https://mbs163.github.io/portal-app/login.html'; }
